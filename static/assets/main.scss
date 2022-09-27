@@ -1,0 +1,53 @@
+@import "~static/assets/login.scss";
+@import "~static/assets/sidebar.scss";
+@import "~static/assets/tabs.scss";
+@import "~static/assets/music.scss";
+@import "~static/assets/playlist.scss";
+// @import "~static/assets/reports.scss";
+// @import "~static/assets/transactions.scss";
+// @import "~static/assets/admin.scss";
+// @import "~static/assets/multiselect.scss";
+@font-face {
+    font-family: font_R;
+    src: url(red-hat-display.ttf);
+  }
+  
+  @font-face {
+    font-family: font_M;
+    src: url(red-hat-display-medium.ttf);
+  }
+  
+  @font-face {
+    font-family: font_B;
+    src: url(red-hat-display-bold.ttf);
+  }
+  
+  @font-face {
+    font-family: font_BL;
+    src: url(red-hat-display-black.ttf);
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    user-select: none;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #c5c5c5;
+    border-radius: 100px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: $BFI2;
+  }

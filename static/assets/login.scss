@@ -1,0 +1,140 @@
+.login-background {
+  background: linear-gradient(180deg, #FFFFFF -33.47%, #ECF2EA 95.83%);
+}
+.login-card {
+  background-color: transparent;
+  // border: 1px solid red;
+  border: 0px;
+  text-align: center;
+  width: 500px;
+  border-radius: 12px;
+  margin-bottom: 60px;
+  &__image {
+    height: auto;
+    width: 80px;
+    margin-bottom: 20px;
+  }
+  &__title {
+    font-family: font_BL;
+    font-weight: bold;
+    font-size: 45px;
+    color: #193C2A;
+  }
+
+  &__subtitle {
+    font-weight: 400;
+    font-size: 14px;
+    bottom: 21px;
+    color: #193C2A;
+    padding-bottom: 15px;
+    margin-top: 10px;
+    font-family: font_M;
+  }
+
+  &__input {
+    transition: 0.4s;
+    background: white;
+    border-radius: 100px;
+    color: #363636;
+    border: 2px solid transparent;
+    height: 45px;
+    width: 300px;
+    text-align: left;
+    padding-left: 20px;
+    line-height: 40px;
+    font-family: font_R;
+    margin-top: 10px;
+
+    &:focus {
+      outline-width: 0px;
+      border: 2px solid #5ABC44;
+      transition: 0.4s;
+    }
+    &::placeholder {
+      color: #787878;
+      opacity: 1;
+    }
+  }
+  &__input-icon {
+    float: right;
+    margin-left: -35px;
+    margin-top: 20px;
+    position: relative;
+    z-index: 2;
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+    color: gray;
+    transition: 0.4s;
+    &:hover {
+      transition: 0.4s;
+      color: #5ABC44;
+    }
+  }
+  &__button {
+    font-family: font_R;
+    height: 45px;
+    width: 300px;
+    outline: 0;
+    border: 0px;
+    margin-top: 10px;
+    transition: 0.4s;
+    border-radius: 100px;
+    color: white;
+    background: #5ABC44;
+    &:hover {
+      outline: 0;
+      border: 0px;
+      transition: 0.4s;
+      background: #193C2A;
+    }
+    &:focus {
+      outline: 0;
+    }
+  }
+  &__inputs {
+    width: 300px;
+  }
+  &__center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.enter-pass {
+  font-family: font_M;
+  font-size: 37px;
+  color: #5ABC44;
+  letter-spacing: 1px;
+  margin-bottom: 2rem;
+}
+
+// input
+
+// select:focus {
+//   outline-width: 0px;
+//   border-bottom: 2px solid #3ab64a;
+//   transition: 0.4s;
+//   border-radius: 0px;
+//   border-left: 0px;
+//   border-right: 0px;
+//   border-top: 0px;
+// }
+
+::placeholder {
+  color: #545454;
+  opacity: 1; /* Firefox */
+}
+
+.login-container {
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}

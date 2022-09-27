@@ -1,0 +1,137 @@
+// SIDEBAR
+.sidebar {
+  position: fixed;
+  bottom: 0px;
+  background-color: #212121;
+  height: 100vh;
+  color: #fff;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.65), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s;
+  width: 224px;
+  font-size: 15px;
+  overflow: auto;
+
+  &__image {
+    transition: none 0.3s;
+    padding: 5px 10px 0px 10px;
+    height: 100%;
+    width: 100%;
+  }
+  &__icon {
+    transition: none 0.3s;
+    width: 0%;
+    display: none;
+  }
+  &__line {
+    background-color: #e5e5e5;
+  }
+  &__header {
+    position: fixed;
+    max-width: 224px;
+    background-color: #212121;
+    z-index: 1;
+  }
+  &__list {
+    margin-top: 118.44px;
+    padding-left: 0;
+  }
+  &__item {
+    padding: 10px;
+    display: block;
+    color: #fff;
+    margin-bottom: 5px;
+    &:hover {
+      color: #fff;
+      background: #01612f;
+      transition: 0.5s;
+      text-decoration: none;
+    }
+  }
+}
+
+// NAVBAR
+
+.navbar {
+  padding: 15px;
+  width: 100%;
+  padding: 8px 0px;
+  &__row {
+    width: 100%;
+  }
+  &__icon {
+    color: black;
+    font-size: 25px;
+  }
+  &__user-detail {
+    font-size: 12px;
+  }
+  &__role {
+    position: relative;
+    bottom: 2px;
+  }
+
+  &__button {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    box-shadow: 0 0 3px black;
+  }
+
+  &__button-icon {
+    font-size: 15px;
+    position: relative;
+    bottom: 2px;
+    right: 5px;
+  }
+}
+
+// NUXT CONTENT
+
+.nuxt {
+  width: 100%;
+  padding: 0px 15px;
+  padding-left: 239px;
+}
+
+@media screen and (max-width: 1175px) {
+  .sidebar {
+    min-width: 80px;
+    max-width: 80px;
+    transition: none 0.3s;
+
+    &__icon {
+      border-radius: 50%;
+      background-color: white;
+      padding: 6px;
+      display: block !important;
+      margin-top: 9px;
+      margin-bottom: -11px;
+      width: 60%;
+      transition: none 0.3s;
+    }
+    &__list {
+      margin-top: 63px;
+    }
+    &__item-name {
+      display: none;
+      transition: all 0.3s;
+    }
+    &__item-caret {
+      padding-right: 0;
+    }
+    &__header {
+      min-width: 80px;
+      max-width: 80px;
+    }
+    &__image {
+      display: none !important;
+      transition: none 0.3s;
+    }
+  }
+
+  .nuxt {
+    width: 100%;
+    padding: 0px 15px;
+    padding-left: 95px;
+  }
+}
