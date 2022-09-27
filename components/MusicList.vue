@@ -19,7 +19,7 @@
         <div class="music__header">
             <div class="music__head1"></div>
             <div class="music__head2">Title</div>
-            <div class="music__head3">Album {{ playingNow.play }}</div>
+            <div class="music__head3">Album</div>
             <div class="music__head4">Artist</div>
         </div>
         <div class="music__body music__scrollY">
@@ -87,6 +87,8 @@ export default {
                 }
             );
         }
+
+        this.$store.commit("trackslist", this.tracks);
     },
     mounted() {
         this.$store.commit("activePages", "nav_music");

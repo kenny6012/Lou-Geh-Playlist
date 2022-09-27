@@ -3,6 +3,7 @@ export default () => ({
     // activityLogsState: [],
     // usersState: [],
     activePage: "",
-    playing: []
+    tracks: [],
+    playing: [],
 });
   

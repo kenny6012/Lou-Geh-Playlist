@@ -13,5 +13,8 @@ export default {
     },
     setToPause(state, data) {
         state.playing.play = data;
-    }
+    },
+    trackslist(state, data) {
+        state.tracks = data;
+    },
 };

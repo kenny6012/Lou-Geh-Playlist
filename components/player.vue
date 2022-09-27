@@ -41,13 +41,17 @@ data() {
 methods: {
     playTrack(track) {
         // alert("Play");
-        if(this.play == true) {
+        if(this.play == true) { // Playing
             this.play = false;
             this.$store.commit("setToPause", false);
         }
-        else {
+        else { // Paused
             this.play = true;
             this.$store.commit("setToPause", true);
+            // console.log(this.listTracks[0]);
+            if(this.playNow == '') {
+                this.$store.commit("setToPlay", this.listTracks[0]);
+            }
         }
     }
 },
@@ -57,6 +61,9 @@ watch: {
     }
 },
 computed: {
+    listTracks() {
+        return this.$store.state.tracks;
+    },
     playNow() {
         return this.$store.state.playing;
     }
