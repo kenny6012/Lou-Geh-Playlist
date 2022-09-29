@@ -22,7 +22,7 @@
             <div class="music__head3">Album</div>
             <div class="music__head4">Artist</div>
         </div>
-        <div class="music__body music__scrollY">
+        <div class="music__body music__scrollY" id="music_scroll">
             <div 
                 v-for="(track, t) in trackz" 
                 :key="'t'+t" @click="playNow(track)" 
@@ -77,7 +77,7 @@ export default {
     created() {
         for(var t=1; t <= 20; t++) {
             this.tracks.push(
-                {
+                { 
                     id: 'T'+t,
                     name: "Track no. "+t,
                     artist: "Artist",
