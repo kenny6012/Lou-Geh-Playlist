@@ -14,7 +14,7 @@
     </div>
     <div class="player__div2">
         <div class="player__btn">
-            <font-awesome-icon icon="step-backward" />
+            <font-awesome-icon icon="step-backward" @click="prev()"/>
         </div>
         <div class="player__PlayPause" @click="playy()">
             <div class="player__button">
@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="player__btn">
-            <font-awesome-icon icon="step-forward" />
+            <font-awesome-icon icon="step-forward" @click="nextt()"/>
         </div>
     </div>
     <div class="player__div3">
@@ -38,10 +38,63 @@ data() {
         play: false,
         player: [],
         current_time: 0,
-        current_track: []
+        current_track: [],
+        listTracks: []
     }
 },
 methods: {
+    prev() {
+        var latestTrack = parseInt(this.listTracks.length) - 1;
+        var trackIndex;
+        // // FIND THE CURRENT TRACK'S ID FROM THE LIST
+        for(let x=0; x < this.listTracks.length; x++) {
+            if(this.listTracks[x].id === this.current_track.id) {
+                trackIndex = x;
+            };
+        }
+
+        if(trackIndex != undefined) {
+            var indexx = trackIndex - 1;
+            if(indexx < 0) {
+                indexx = latestTrack;
+            }
+
+            if(this.listTracks[indexx].source != "") {
+                this.$store.commit("setToPlay", this.listTracks[indexx]);
+                this.$store.commit("playTrack", true);
+            }
+            else {
+                alert("Track Index "+ indexx+" not found");
+            }
+        }
+    },
+    nextt() {
+        var latestTrack = parseInt(this.listTracks.length) - 1;
+        var trackIndex;
+        // // FIND THE CURRENT TRACK'S ID FROM THE LIST
+        for(let x=0; x < this.listTracks.length; x++) {
+            if(this.listTracks[x].id === this.current_track.id) {
+                trackIndex = x;
+            };
+        }
+
+        if(trackIndex != undefined) {
+            var indexx = trackIndex + 1;
+            if(indexx > latestTrack) {
+                this.$store.commit("setToPlay", this.listTracks[0]);
+                this.$store.commit("playTrack", true);
+            }
+            else {
+                if(this.listTracks[indexx].source != "") {
+                    this.$store.commit("setToPlay", this.listTracks[indexx]);
+                    this.$store.commit("playTrack", true);
+                }
+                else {
+                    alert("Track Index "+ indexx+" not found");
+                }
+            }
+        }
+    },
     playy() {
         if(this.play == true) { // TO PAUSE
             // console.log("pause");
@@ -68,11 +121,10 @@ methods: {
         if(this.playNow != "") {
             if(this.playNow.source != "") {
                 if(this.current_track.id != undefined && this.current_track.id != this.playNow.id) {
-                    console.log(this.current_track.id);
-                    console.log(this.playNow);
-                    this.player.pause();
-                    this.player.currentTime = 0;
+                    console.log(this.current_track.id+" - "+this.playNow.id);
                     this.current_track = [];
+                    this.player.pause();
+                    this.current_time = 0;
                 }
                 this.player = new Audio(this.playNow.source);
                 this.player.currentTime = this.current_time;
@@ -100,10 +152,13 @@ methods: {
                 );
             }
             else {
-                Alert("Track Not Found");
+                alert("Track Not Found");
             }
         }
     },
+},
+created() {
+    this.listTracks =  this.$store.state.tracks;
 },
 watch: {
     playNow() {
@@ -112,9 +167,6 @@ watch: {
     }
 },
 computed: {
-    listTracks() {
-        return this.$store.state.tracks;
-    },
     playNow() {
         return this.$store.state.playing;
     }
