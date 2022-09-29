@@ -121,7 +121,7 @@ methods: {
         if(this.playNow != "") {
             if(this.playNow.source != "") {
                 if(this.current_track.id != undefined && this.current_track.id != this.playNow.id) {
-                    console.log(this.current_track.id+" - "+this.playNow.id);
+                    // console.log(this.current_track.id+" - "+this.playNow.id);
                     this.current_track = [];
                     this.player.pause();
                     this.current_time = 0;

@@ -1,5 +1,6 @@
 <template>
 <div class="sidenav__layout">
+    <AddTrack />
     <div class="sidenav__body">
         <div class="sidenav__bar">
             <div class="sidenav__logo">
@@ -34,10 +35,12 @@
 <script>
 import { mapGetters } from "vuex";
 import Player from "~/components/player.vue";
+import AddTrack from "~/components/modal/add_track.vue";
 
 export default {
     components: {
-        Player
+        Player,
+        AddTrack
     },
     data() {
         return {
