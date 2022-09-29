@@ -1,10 +1,10 @@
 <template>
   <b-container fluid class="px-0">
     <!-- Header -->
-    <!-- <h1>Music</h1>
+    <h1>Music</h1>
     <div>
-      <b-row> -->
-        <!-- Search --
+      <b-row>
+        <!-- Search -->
         <b-col cols="12" class="my-1">
           <b-form-group>
             <b-input-group>
@@ -18,7 +18,7 @@
             </b-input-group>
           </b-form-group>
         </b-col>
-        <-- Cards --
+        <!-- Cards -->
         <b-col>
           <div class="wrapper">
             <div class="card-container">
@@ -40,9 +40,9 @@
           </div>
         </b-col>
       </b-row>
-    </div> -->
+    </div>
     <!-- Footer Music Player -->
-    <!-- <div id="cs_audioplayer">
+    <div id="cs_audioplayer">
       <span id="cs_play_pause_btn" style="position: relative">
         {{ current.title }} - {{ current.artist }}
         <b-button class="play" v-if="!isPlaying" @click="play">
@@ -53,7 +53,7 @@
         </b-button>
       </span>
 
-    </div> -->
+    </div> 
   </b-container>
 </template>
 

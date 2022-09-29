@@ -6,7 +6,7 @@
                 <div class="pages__searchIcon">
                     <font-awesome-icon icon="search" />
                 </div>
-                <input class="pages__searchInput" type="text" placeholder="Search tracks here..." v-model="find">
+                <input class="pages__searchInput" type="text" placeholder="Search album here..." v-model="find">
             </div>
         </div>
         <div class="pages__header2">       

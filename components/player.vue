@@ -8,7 +8,7 @@
         <div class="player__trackInfo">
             <div class="player__trackTitle">{{ playNow!= '' ? (playNow.name != '' ? playNow.name:'Unknown Track'):'Select a track to play' }}</div>
             <div class="player__trackSub" v-show="playNow != ''">
-                {{ (playNow.artist != '' ? playNow.artist:'Unknown Artist')+' | '+(playNow.artist != '' ? playNow.artist:'Unknown Album') }}
+                {{ (playNow.artist != '' ? playNow.artist:'Unknown Artist')+' | '+(playNow.album != '' ? playNow.album:'Unknown Album') }}
             </div>
         </div>
     </div>
@@ -16,7 +16,7 @@
         <div class="player__btn">
             <font-awesome-icon icon="step-backward" />
         </div>
-        <div class="player__PlayPause" @click="playTrack()">
+        <div class="player__PlayPause" @click="playy()">
             <div class="player__button">
                 <font-awesome-icon :icon="play == false? 'play':'pause'" />
             </div>
@@ -36,28 +36,79 @@ export default {
 data() {
     return {
         play: false,
+        player: [],
+        current_time: 0,
+        current_track: []
     }
 },
 methods: {
-    playTrack(track) {
-        // alert("Play");
-        if(this.play == true) { // Playing
+    playy() {
+        if(this.play == true) { // TO PAUSE
+            // console.log("pause");
             this.play = false;
-            this.$store.commit("setToPause", false);
+            this.player.pause();
+            this.$store.commit("playTrack", false);
+
+            this.current_time = this.player.currentTime;
         }
-        else { // Paused
+        else { // TO PLAY
+            // console.log("play");
             this.play = true;
-            this.$store.commit("setToPause", true);
-            // console.log(this.listTracks[0]);
+            this.$store.commit("playTrack", true);
             if(this.playNow == '') {
                 this.$store.commit("setToPlay", this.listTracks[0]);
+                this.$store.commit("playTrack", true);
+            }
+            else {
+                this.playTrack();
             }
         }
-    }
+    },
+    playTrack() {
+        if(this.playNow != "") {
+            if(this.playNow.source != "") {
+                if(this.current_track.id != undefined && this.current_track.id != this.playNow.id) {
+                    console.log(this.current_track.id);
+                    console.log(this.playNow);
+                    this.player.pause();
+                    this.player.currentTime = 0;
+                    this.current_track = [];
+                }
+                this.player = new Audio(this.playNow.source);
+                this.player.currentTime = this.current_time;
+                this.player.play();
+                this.current_track = this.playNow;
+
+                // IF TRACK HAS ENDED
+                this.player.addEventListener(
+                    "ended",
+                    function() {
+                        this.$store.commit("playTrack", false);
+                    }
+                //     function() {
+                //         alert("Track has ended");
+                //     }
+                //     // function () {
+                //     //     this.index++;
+                //     //     if (this.index > this.songs.length - 1) {
+                //     //         this.index = 0;
+                //     //     }
+
+                //     //     this.current = this.songs[this.index];
+                //     //     this.play(this.current);
+                //     // }.bind(this)
+                );
+            }
+            else {
+                Alert("Track Not Found");
+            }
+        }
+    },
 },
 watch: {
     playNow() {
         this.play = true;
+        this.playTrack();
     }
 },
 computed: {
