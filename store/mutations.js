@@ -11,7 +11,7 @@ export default {
     setToPlay(state, data) {
         state.playing = data;
     },
-    setToPause(state, data) {
+    playTrack(state, data) {
         state.playing.play = data;
     },
     trackslist(state, data) {

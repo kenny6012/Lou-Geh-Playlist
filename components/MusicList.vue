@@ -22,7 +22,7 @@
             <div class="music__head3">Album</div>
             <div class="music__head4">Artist</div>
         </div>
-        <div class="music__body music__scrollY">
+        <div class="music__body music__scrollY" id="music_scroll">
             <div 
                 v-for="(track, t) in trackz" 
                 :key="'t'+t" @click="playNow(track)" 
@@ -58,10 +58,20 @@ export default {
             tracks: [
                 {
                     id: 'T0',
-                    name: "Only Exception",
+                    name: "The Only Exception",
                     artist: "Paramore",
                     album: "Brand New Eyes",
                     cover: "Paramore_Brand_New_Eyes.png",
+                    source: "Paramore_The_Only_Exception.mp3",
+                    play: false
+                },
+                {
+                    id: 'T1',
+                    name: "Brick by Boring Brick",
+                    artist: "Paramore",
+                    album: "Brand New Eyes",
+                    cover: "Paramore_Brand_New_Eyes.png",
+                    source: "Paramore_Brick_By_Boring_Brick.mp3",
                     play: false
                 },
             ],
@@ -70,18 +80,23 @@ export default {
     },
     methods: {
         playNow(track) {
-            this.$store.commit("setToPlay", track);
-            this.$store.commit("setToPause", true);
+            if(track != "") {
+                if(track.source != "") {
+                    this.$store.commit("setToPlay", track);
+                    this.$store.commit("playTrack", true);
+                }
+            }
         }
     },
     created() {
-        for(var t=1; t <= 20; t++) {
+        for(var t=2; t <= 20; t++) {
             this.tracks.push(
-                {
+                { 
                     id: 'T'+t,
                     name: "Track no. "+t,
                     artist: "Artist",
                     album: "Album",
+                    source: "",
                     cover: "default_artwork.png",
                     play: false,
                 }
