@@ -6,7 +6,7 @@
                     <font-awesome-icon icon="music" /> &ensp; Music
                 </div>
                 <div class="modal__header2">
-                    <font-awesome-icon icon="times-circle" />
+                    <font-awesome-icon class="modal__close" icon="times-circle" @click="add_music_close()"/>
                 </div>
             </div>
             <div class="modal__body">
@@ -99,6 +99,9 @@ data() {
     }
 },
 methods: {
+    add_music_close() {
+        this.$store.commit("open_modal_addTrack", false);
+    },
     showArtists() {
         this.showArtist = !this.showArtist;
         this.showAlbum = false;

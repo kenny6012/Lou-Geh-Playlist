@@ -1,6 +1,6 @@
 <template>
 <div class="sidenav__layout">
-    <AddTrack />
+    <AddTrack v-show="add_track"/>
     <div class="sidenav__body">
         <div class="sidenav__bar">
             <div class="sidenav__logo">
@@ -79,7 +79,12 @@ export default {
         }
     },
     computed: {
-        ...mapGetters({ activeNav: "active" }),
+        ...mapGetters(
+            { 
+                activeNav: "active",
+                add_track: "open_add_track"
+            }
+        ),
         test() {
             return this.$store.state.activePage;
         }

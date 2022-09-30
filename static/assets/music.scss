@@ -245,6 +245,24 @@ $emphasize: #FF833D;
     }
 }
 .pages {
+    &__add {
+        position: fixed;
+        z-index: 1;
+        bottom: 45px;
+        right: 50px;
+        height: 60px;
+        width: 60px;
+        background: $BFI1;
+        color: white;
+        font-size: 25px;
+        transition: 0.2s;
+        border-radius: 100px;
+        cursor: pointer;
+        &:hover {
+            transition: 0.2s;
+            background: $BFI2;
+        }
+    }
     &__layout {
         background: $BG;
         padding: 25px;
@@ -593,10 +611,13 @@ $emphasize: #FF833D;
         width: 100%;
         height: 100vh;
         background: #193c2a5c;
-        z-index: 1;
+        z-index: 2;
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+    &__close {
+        cursor: pointer;
     }
     &__container {
         background: white;
@@ -605,7 +626,19 @@ $emphasize: #FF833D;
         min-height: 500px;
         height: fit-content;
         min-height: 500px;
+
+        animation: scaler ease-in-out 0.2s;
     }
+    @keyframes scaler {
+        0% {
+          transform: scale(0.4);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
     &__header {
         // border: 1px solid red;
         width: 100%;

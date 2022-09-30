@@ -5,5 +5,6 @@ export default () => ({
     activePage: "",
     tracks: [],
     playing: [],
+    open_add_track: false,
 });
   

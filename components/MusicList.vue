@@ -1,5 +1,11 @@
 <template>
 <div class="pages__layout">
+    <!-- ADD BUTTON -->
+    <button class="pages__add" @click="add_music()">
+        <font-awesome-icon icon="plus" />
+    </button>
+
+    <!-- CONTENTS -->
     <div class="pages__header">
         <div class="pages__header1">
             <div class="pages__searchBar">
@@ -79,6 +85,9 @@ export default {
         }
     },
     methods: {
+        add_music() {
+            this.$store.commit("open_modal_addTrack", true);
+        },
         playNow(track) {
             if(track != "") {
                 if(track.source != "") {

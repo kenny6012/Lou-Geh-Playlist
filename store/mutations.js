@@ -17,4 +17,7 @@ export default {
     trackslist(state, data) {
         state.tracks = data;
     },
+    open_modal_addTrack(state, data) {
+        state.open_add_track = data;
+    }
 };

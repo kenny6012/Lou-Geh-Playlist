@@ -5,4 +5,7 @@ export default {
     active(state) {
       return state.activePage;
     },
+    open_add_track(state) {
+      return state.open_add_track;
+    }
   };
