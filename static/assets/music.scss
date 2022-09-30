@@ -667,7 +667,7 @@ $emphasize: #FF833D;
         font-family: font_B;
         color: $main;
         outline: 0;
-        border-bottom: 2px solid $BG;
+        border-bottom: 2px solid transparent;
         transition: 0.2s;
         // border-radius: 5px;
         padding-left: 25px;
@@ -698,7 +698,7 @@ $emphasize: #FF833D;
         display: flex;
         align-items: center;
         transition: 0.2s;
-        border-bottom: 2px solid $BG;
+        border-bottom: 2px solid transparent;
         // border-radius: 5px;
         // background: $BG;
         cursor: pointer;
@@ -737,8 +737,15 @@ $emphasize: #FF833D;
             transition: 0.2s;
         }
     }
-    &__trackUpload {
-        margin-top: 112px;
+    &__uploadTrack {
+        border: 0;
+        border-radius: 6px;
+        background: $BG;
+        color: $sub;
+        font-family: font_M;
+        font-size: 16px;
+        padding: 10px 20px;
+        margin-top: 106px;
     }
     &__footer {
         // border: 1px solid red;

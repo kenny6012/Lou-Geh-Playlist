@@ -54,7 +54,8 @@
                         </div>
                     </div>
 
-                    <b-form-file :state="true" v-model="musicFile" placeholder="Upload Track" class="modal__trackUpload" />
+                    <input type="button" :value="uploadTrackLabel" class="modal__uploadTrack" @click="$refs.uploadTrack.click()" />
+                    <input id="uploadTrack" ref="uploadTrack" style="display: none" type="file" accept=".mp3,audio/*" @change="uploadTrack($event)" />
                 </div>
 
 
@@ -79,15 +80,16 @@
 export default {
 data() {
     return {
-        musicFile: [],
         imageData: "bg.png",
         uploadImageLabel: "Upload Image",
+        uploadTrackLabel: "Upload Track",
         coverImage: "",
 
         showArtist: false,
         showAlbum: false,
         showStatus: false,
 
+        track_BlobData: [],
         track_title: "",
         track_artist: "Artist/Band",
         track_album: "Album",
@@ -126,6 +128,16 @@ methods: {
             reader.readAsDataURL(input.files[0]);
             this.coverImage = input.files[0];
         }
+    },
+    uploadTrack(event) {
+      var input = event.target;
+      if (input.files && input.files[0]) {
+        // IMAGE NAME
+        this.uploadTrackLabel = input.files[0].name;
+
+        // IMAGE BLOB
+        this.track_BlobData = input.files[0];
+      }
     },
 },
 created() {
