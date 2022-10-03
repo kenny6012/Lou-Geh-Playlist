@@ -33,8 +33,13 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/bootstrap
     "bootstrap-vue/nuxt",
+    "@nuxtjs/axios",
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: { postcss: null },
+
+  axios: {
+    baseURL: "http://172.16.28.8:3000"
+  },
 };

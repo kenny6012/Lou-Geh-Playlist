@@ -1,5 +1,11 @@
 <template>
 <div class="pages__layout">
+    <!-- ADD BUTTON -->
+    <button class="pages__add" @click="add_artist()">
+        <font-awesome-icon icon="plus" />
+    </button>
+
+    <!-- CONTENTS -->
     <div class="pages__header">
         <div class="pages__header1">
             <div class="pages__searchBar">
@@ -20,9 +26,9 @@
             <div class="covers__card" v-for="(artist, a) in artistz" :key="'a'+a">
                 <div class="covers__box">
                     <!-- <div class="covers__img" :style="`background-image: url(${album.cover})`"></div> -->
-                    <img :src="artist.cover" :alt="artist.name" class="covers__img" width="100%" height="auto">
+                    <img :src="`${link}/${artist.artist_img}`" :alt="`${link}/${artist.artist_img}`" class="covers__img" width="100%" height="auto">
                     <div class="covers__text">
-                        <div class="covers__title">{{ artist.name }}</div>
+                        <div class="covers__title">{{ artist.artist_name }}</div>
                     </div>
                 </div>
             </div>
@@ -32,41 +38,50 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
     data() {
         return {
             find: "",
-            artists: [
-                {
-                    id: "A0",
-                    name: "Paramore",
-                    cover: "Paramore.png"
-                }
-            ]
+            link: this.$axios.defaults.baseURL,
+            // artists: [
+            //     {
+            //         artist_id: 2,
+            //         artist_name: "artist 12",
+            //         artist_img: "default_disc.jpg",
+            //         status: "active",
+            //     }
+            // ]
+        }
+    },
+    methods: {
+        add_artist() {
+            this.$store.commit("open_modal_addArtist", true);
         }
     },
     created() {
-        for(var a=1; a <= 20; a++) {
-            this.artists.push(
-                {
-                    id: "A"+a,
-                    name: "Artist no. "+a,
-                    cover: "default_disc.jpg"
-                }
-            );
-        }
+        this.$store.dispatch("getArtitist");
     },
     mounted() {
         this.$store.commit("activePages", "nav_artist");
     },
     computed: {
+        ...mapGetters(
+            { 
+                artists: "list_artist",
+            }
+        ),
         artistz() {
             return this.artists.filter(data => {
                 return (
-                String(data.name)
+                String(data.artist_id)
                     .toLowerCase()
                     .includes(this.find.toLowerCase()) ||
-                String(data.cover)
+                String(data.artist_img)
+                    .toLowerCase()
+                    .includes(this.find.toLowerCase()) ||
+                String(data.artist_name)
                     .toLowerCase()
                     .includes(this.find.toLowerCase())
                 );

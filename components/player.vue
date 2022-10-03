@@ -2,13 +2,13 @@
 <div class="player__layout">
     <div class="player__div1">
         <div 
-            :style="'background-image: url('+(playNow != '' ? (playNow.cover != '' ? playNow.cover:'default_artwork.png'):'default_artwork.png')+')'"
+            :style="`background-image: url(${playNow.track_img ? link+playNow.track_img:'default_artwork.png'})`"
             class="player__trackImg">
         </div>
         <div class="player__trackInfo">
-            <div class="player__trackTitle">{{ playNow!= '' ? (playNow.name != '' ? playNow.name:'Unknown Track'):'Select a track to play' }}</div>
+            <div class="player__trackTitle">{{ playNow!= '' ? (playNow.track_name != '' ? playNow.track_name:'Unknown Track'):'Select a track to play' }}</div>
             <div class="player__trackSub" v-show="playNow != ''">
-                {{ (playNow.artist != '' ? playNow.artist:'Unknown Artist')+' | '+(playNow.album != '' ? playNow.album:'Unknown Album') }}
+                {{ (playNow.artist_name != '' ? playNow.artist_name:'Unknown Artist')+' | '+(playNow.album_name != '' ? playNow.album_name:'Unknown Album') }}
             </div>
         </div>
     </div>
@@ -35,6 +35,7 @@
 export default {
 data() {
     return {
+        link: this.$axios.defaults.baseURL+"/",
         play: false,
         player: [],
         current_time: 0,
@@ -109,7 +110,12 @@ methods: {
             this.play = true;
             this.$store.commit("playTrack", true);
             if(this.playNow == '') {
-                this.$store.commit("setToPlay", this.listTracks[0]);
+                console.log("=================================");
+                console.log("this.$store.state.list_tracks");
+                console.log("=================================");
+                var topTrack = this.$store.state.list_tracks;
+                console.log("=================================");
+                this.$store.commit("setToPlay", topTrack[0]);
                 this.$store.commit("playTrack", true);
             }
             else {
@@ -126,17 +132,44 @@ methods: {
                     this.player.pause();
                     this.current_time = 0;
                 }
-                this.player = new Audio(this.playNow.source);
+                // GET CURRENT TRACK FROM STATE
+                var playTrackNow = this.$store.state.playing;
+                // console.log(this.link+playTrackNow.track_mp3);
+                this.player = new Audio(this.link+playTrackNow.track_mp3);
                 this.player.currentTime = this.current_time;
+
+                // PLAY AUDIO
                 this.player.play();
+                var playerPromise = this.player.play();
                 this.current_track = this.playNow;
 
-                // IF TRACK HAS ENDED
-                this.player.addEventListener(
-                    "ended",
-                    function() {
+
+                if (playerPromise !== undefined) {
+                    playerPromise.then(_ => {
+                        console.log(playerPromise);
+                        // Automatic playback started!
+                        // Show playing UI.
+                        // We can now safely pause video...
+                        // this.player.pause();
+                    })
+                    .catch(error => {
+                        // Auto-play was prevented
+                        // Show paused UI.
+                        this.play = false;
                         this.$store.commit("playTrack", false);
-                    }
+                        console.log(error);
+                    });
+                }
+                else {
+                    console.log("playerPromise is undefined");
+                }
+
+                // IF TRACK HAS ENDED
+                // this.player.addEventListener(
+                //     "ended",
+                //     function() {
+                //         this.$store.commit("playTrack", false);
+                //     }
                 //     function() {
                 //         alert("Track has ended");
                 //     }
@@ -149,7 +182,7 @@ methods: {
                 //     //     this.current = this.songs[this.index];
                 //     //     this.play(this.current);
                 //     // }.bind(this)
-                );
+                // );
             }
             else {
                 alert("Track Not Found");
@@ -158,7 +191,7 @@ methods: {
     },
 },
 created() {
-    this.listTracks =  this.$store.state.tracks;
+    this.listTracks =  this.$store.state.list_tracks;
 },
 watch: {
     playNow() {

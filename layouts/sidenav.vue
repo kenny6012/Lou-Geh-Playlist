@@ -1,6 +1,8 @@
 <template>
 <div class="sidenav__layout">
     <AddTrack v-show="add_track"/>
+    <AddArtist v-show="add_artist"/>
+    <AddAlbum v-show="add_album"/>
     <div class="sidenav__body">
         <div class="sidenav__bar">
             <div class="sidenav__logo">
@@ -36,11 +38,15 @@
 import { mapGetters } from "vuex";
 import Player from "~/components/player.vue";
 import AddTrack from "~/components/modal/add_track.vue";
+import AddArtist from "~/components/modal/add_artist.vue";
+import AddAlbum from "~/components/modal/add_album.vue";
 
 export default {
     components: {
         Player,
-        AddTrack
+        AddTrack,
+        AddArtist,
+        AddAlbum,
     },
     data() {
         return {
@@ -72,6 +78,9 @@ export default {
             ]
         }
     },
+    created() {
+        this.$store.dispatch("getTracks");
+    },
     methods: {
         navigate(page) {
             this.$store.commit("activePages", page.id);
@@ -82,7 +91,9 @@ export default {
         ...mapGetters(
             { 
                 activeNav: "active",
-                add_track: "open_add_track"
+                add_track: "open_add_track",
+                add_artist: "open_add_artist",
+                add_album: "open_add_album",
             }
         ),
         test() {
