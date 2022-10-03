@@ -61,7 +61,7 @@ export default {
         }
     },
     created() {
-        this.$store.dispatch("getArtitist");
+        
     },
     mounted() {
         this.$store.commit("activePages", "nav_artist");

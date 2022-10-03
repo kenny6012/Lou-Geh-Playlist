@@ -75,11 +75,19 @@ export default {
                     icon: "cog",
                     route: "../admin"
                 },
-            ]
+            ],
         }
     },
     created() {
+        this.$store.dispatch("getArtitist");
+        this.$store.dispatch("getAlbums");
         this.$store.dispatch("getTracks");
+    },
+    mounted() {
+        
+    },
+    watch: {
+        
     },
     methods: {
         navigate(page) {
@@ -94,6 +102,8 @@ export default {
                 add_track: "open_add_track",
                 add_artist: "open_add_artist",
                 add_album: "open_add_album",
+
+                tracks: "list_tracks"
             }
         ),
         test() {

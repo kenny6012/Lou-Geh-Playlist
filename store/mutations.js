@@ -9,12 +9,17 @@ export default {
     },
     setalbum(state, data) {
         state.list_album = data;
+        // console.log("==========================");
+        // console.log("state.list_albums");
+        // console.log("==========================");
+        // console.log(data);
+        // console.log("==========================");
     },
     settracks(state, data) {
         // console.log("==========================");
         // console.log("state.list_tracks");
         // console.log("==========================");
-        console.log(data);
+        // console.log(data);
         state.list_tracks = data;
         // console.log("==========================");
     },
@@ -22,12 +27,15 @@ export default {
         // console.log(data);
         state.activePage = data;
     },
+    currentTrack(state, data) { // TO PUT THE FIRST TRACK ON playing STATE
+        state.playing = data;
+    },
     setToPlay(state, data) {
         // console.log("==========================");
         // console.log("state.playing");
         // console.log("==========================");
         // console.log(data[Object.keys(data)[0]]); //res.data[Object.keys(res.data)[0]]
-        console.log(data); //res.data[Object.keys(res.data)[0]]
+        // console.log(data); //res.data[Object.keys(res.data)[0]]
         state.playing = data;
         state.playing.play = true;
         // console.log("==========================");

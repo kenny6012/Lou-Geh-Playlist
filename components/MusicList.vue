@@ -32,7 +32,7 @@
             <div 
                 v-for="(track, t) in trackz" 
                 :key="'t'+t" @click="playNow(track)" 
-                :class="'music__bodyTable '+(track.id == playingNow.id ? 'music__playing':'')">
+                :class="'music__bodyTable '+(track.track_id == playingNow.track_id ? 'music__playing':'')">
                 
                 <div class="music__head1">
                     <div class="special__div1">
@@ -43,7 +43,7 @@
                         <img :src="`${link}/${track.track_img}`" :alt="`${link}/${track.track_img}`" class="track__img" width="40px" height="40px">
                     </div>
                     <div class="special__div2">
-                        <font-awesome-icon :icon="(track.id == playingNow.id && playingNow.play == true ? 'pause':'play')" />
+                        <font-awesome-icon :icon="(track.track_id == playingNow.track_id && playingNow.play == true ? 'pause':'play')" />
                     </div>
                 </div>
 
@@ -86,7 +86,7 @@ export default {
         },
         playNow(track) {
             if(track != "") {
-                if(track.source != "") {
+                if(track.track_mp3 != "") {
                     // console.log("=============================");
                     // console.log("setToPlay");
                     // console.log("=============================");
@@ -109,6 +109,7 @@ export default {
                     //     ]
                     // );
                     this.$store.commit("setToPlay", track);
+                    // console.log("test");
                     // this.$store.commit("playTrack", true); // PUT INSIDE MUTATION PARA SABAY
                 }
             }

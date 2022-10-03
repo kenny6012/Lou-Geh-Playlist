@@ -51,8 +51,8 @@ export default {
             headers: {"Access-Control-Allow-Origin": "*"},
         }).then(res => {
             commit("settracks", res.data);
-            console.log(res.status);
-            console.log(res.data);
+            // console.log(res.status);
+            // console.log(res.data);
             return res;
         });
     },

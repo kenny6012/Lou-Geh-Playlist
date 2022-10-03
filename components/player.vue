@@ -1,10 +1,24 @@
 <template>
 <div class="player__layout">
     <div class="player__div1">
-        <div 
-            :style="`background-image: url(${playNow.track_img ? link+playNow.track_img:'default_artwork.png'})`"
-            class="player__trackImg">
-        </div>
+        
+        <!-- <img v-if="playNow.track_img || playNow" src="default_artwork.png" alt="Default Cover" class="player__trackImg" width="75px" height="75px">
+        <img v-else :src="`${link+playNow.track_img}`" :alt="`${link+playNow.track_img}`" class="player__trackImg" width="75px" height="75px"> -->
+        <img 
+            v-if="!playNow.track_img || !playNow" 
+            src="default_artwork.png" 
+            alt="Default Cover" 
+            class="player__trackImg" 
+            width="75px" 
+            height="75px">
+        <img 
+            v-else
+            :src="`${link+playNow.track_img ? link+playNow.track_img:'default_artwork.png'}`" 
+            :alt="`${link+playNow.track_img ? link+playNow.track_img:'default_artwork.png'}`" 
+            class="player__trackImg" 
+            width="75px" 
+            height="75px">
+
         <div class="player__trackInfo">
             <div class="player__trackTitle">{{ playNow!= '' ? (playNow.track_name != '' ? playNow.track_name:'Unknown Track'):'Select a track to play' }}</div>
             <div class="player__trackSub" v-show="playNow != ''">
@@ -40,7 +54,7 @@ data() {
         player: [],
         current_time: 0,
         current_track: [],
-        listTracks: []
+        // listTracks: []
     }
 },
 methods: {
@@ -49,7 +63,7 @@ methods: {
         var trackIndex;
         // // FIND THE CURRENT TRACK'S ID FROM THE LIST
         for(let x=0; x < this.listTracks.length; x++) {
-            if(this.listTracks[x].id === this.current_track.id) {
+            if(this.listTracks[x].track_id === this.current_track.track_id) {
                 trackIndex = x;
             };
         }
@@ -60,7 +74,7 @@ methods: {
                 indexx = latestTrack;
             }
 
-            if(this.listTracks[indexx].source != "") {
+            if(this.listTracks[indexx].track_mp3 != "") {
                 this.$store.commit("setToPlay", this.listTracks[indexx]);
                 this.$store.commit("playTrack", true);
             }
@@ -72,9 +86,10 @@ methods: {
     nextt() {
         var latestTrack = parseInt(this.listTracks.length) - 1;
         var trackIndex;
-        // // FIND THE CURRENT TRACK'S ID FROM THE LIST
+
+        // FIND THE CURRENT TRACK'S ID FROM THE LIST
         for(let x=0; x < this.listTracks.length; x++) {
-            if(this.listTracks[x].id === this.current_track.id) {
+            if(this.listTracks[x].track_id === this.current_track.track_id) {
                 trackIndex = x;
             };
         }
@@ -86,7 +101,7 @@ methods: {
                 this.$store.commit("playTrack", true);
             }
             else {
-                if(this.listTracks[indexx].source != "") {
+                if(this.listTracks[indexx].track_mp3 != "") {
                     this.$store.commit("setToPlay", this.listTracks[indexx]);
                     this.$store.commit("playTrack", true);
                 }
@@ -98,7 +113,6 @@ methods: {
     },
     playy() {
         if(this.play == true) { // TO PAUSE
-            // console.log("pause");
             this.play = false;
             this.player.pause();
             this.$store.commit("playTrack", false);
@@ -106,36 +120,27 @@ methods: {
             this.current_time = this.player.currentTime;
         }
         else { // TO PLAY
-            // console.log("play");
             this.play = true;
             this.$store.commit("playTrack", true);
-            if(this.playNow == '') {
-                console.log("=================================");
-                console.log("this.$store.state.list_tracks");
-                console.log("=================================");
-                var topTrack = this.$store.state.list_tracks;
-                console.log("=================================");
-                this.$store.commit("setToPlay", topTrack[0]);
-                this.$store.commit("playTrack", true);
-            }
-            else {
-                this.playTrack();
-            }
+
+            this.playTrack();
         }
     },
     playTrack() {
-        if(this.playNow != "") {
-            if(this.playNow.source != "") {
-                if(this.current_track.id != undefined && this.current_track.id != this.playNow.id) {
-                    // console.log(this.current_track.id+" - "+this.playNow.id);
+        if(this.playNow) {
+            if(this.playNow.track_mp3 != "") {
+
+                // console.log(this.playNow.track_id+" - "+this.current_track.track_id);
+
+                if(this.playNow.track_id != this.current_track.track_id && this.current_track.track_id != undefined) {
+                    // console.log("test");
                     this.current_track = [];
                     this.player.pause();
                     this.current_time = 0;
                 }
-                // GET CURRENT TRACK FROM STATE
-                var playTrackNow = this.$store.state.playing;
-                // console.log(this.link+playTrackNow.track_mp3);
-                this.player = new Audio(this.link+playTrackNow.track_mp3);
+                
+                // GET AUDIO
+                this.player = new Audio(this.link+this.playNow.track_mp3);
                 this.player.currentTime = this.current_time;
 
                 // PLAY AUDIO
@@ -143,10 +148,11 @@ methods: {
                 var playerPromise = this.player.play();
                 this.current_track = this.playNow;
 
+                // console.log(this.current_track);
 
                 if (playerPromise !== undefined) {
                     playerPromise.then(_ => {
-                        console.log(playerPromise);
+                        // console.log(playerPromise);
                         // Automatic playback started!
                         // Show playing UI.
                         // We can now safely pause video...
@@ -191,15 +197,23 @@ methods: {
     },
 },
 created() {
-    this.listTracks =  this.$store.state.list_tracks;
+    // this.listTracks =  this.$store.state.list_tracks;
 },
 watch: {
     playNow() {
         this.play = true;
         this.playTrack();
+    },
+    listTracks() {
+        var firstTrack = this.$store.state.list_tracks;
+        // console.log(firstTrack);
+        this.$store.commit("currentTrack", firstTrack[0]);
     }
 },
 computed: {
+    listTracks() {
+        return this.$store.state.list_tracks.reverse();
+    },
     playNow() {
         return this.$store.state.playing;
     }

@@ -33,7 +33,7 @@
                                 :key="'a'+a" 
                                 @click="setArtist(artist)">
 
-                                {{ artist.name }}
+                                {{ artist.artist_name }}
 
                             </div>
                         </div>
@@ -44,11 +44,11 @@
                         <div class="modal__optionHolder" v-show="showAlbum">
                             <div 
                                 class="modal__options" 
-                                v-for="(album, a) in track_albums" 
+                                v-for="(album, a) in albumz" 
                                 :key="'a'+a" 
                                 @click="setAlbums(album)">
 
-                                {{ album.name }}
+                                {{ album.album_name }}
 
                             </div>
                         </div>
@@ -64,12 +64,13 @@
             <div class="modal__footer">
                 <div class="modal__footer1">
                     <div v-show="showStatus">
-                        <font-awesome-icon icon="spinner" /> &ensp; Status...
+                        <font-awesome-icon icon="spinner" v-show="showSpinner"/> &ensp; 
+                        <span :style="`color: ${statusColor}; font-size: 16px;`"> {{ status }}... </span>
                     </div>
                 </div>
                 <div class="modal__footer2">
-                    <input class="modal__buttonCancel" type="button" value="Clear">
-                    <input class="modal__buttonSave" type="button" value="Save">
+                    <input class="modal__buttonCancel" type="button" value="Clear" @click="clearFields()">
+                    <input class="modal__buttonSave" type="button" value="Save" @click="saveTrack()">
                 </div>
             </div>
     </div>
@@ -77,6 +78,9 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import axios from "axios";
+
 export default {
 data() {
     return {
@@ -85,20 +89,100 @@ data() {
         uploadTrackLabel: "Upload Track",
         coverImage: "",
 
+        findAlbums: "",
+
         showArtist: false,
         showAlbum: false,
         showStatus: false,
+        showSpinner: false,
+
+        status: "",
+        statusColor: "#193C2A",
 
         track_BlobData: [],
         track_title: "",
-        track_artist: "Artist/Band",
-        track_album: "Album",
-        track_title: "",
-        track_artists: [],
-        track_albums: [],
+        track_artist: "Select Artist/Band",
+        track_album: "Select Album",
+
+        final_album_id: "",
+        final_artist_id: "",
+        // track_artists: [],
+        // track_albums: [],
     }
 },
 methods: {
+    clearFields() {
+        this.imageData = "bg.png",
+        this.uploadImageLabel = "Upload Image",
+        this.uploadTrackLabel = "Upload Track",
+        this.coverImage = "",
+
+        this.findAlbums = "",
+
+        this.track_title = "";
+        this.track_artist = "Select Artist/Band",
+        this.track_album = "Select Album",
+
+        this.status = "",
+        this.statusColor = "#193C2A",
+
+        this.showArtist = false,
+        this.showAlbum = false,
+        this.showStatus = false,
+        this.showSpinner = false,
+
+        this.final_album_id = "";
+        this.final_artist_id = "";
+        this.coverImage = [];
+        this.uploadTrackLabel = [];
+        this.track_BlobData = [];
+
+    },
+    saveTrack() {
+        if(this.track_album == "") {
+            this.showStatus = true;
+            this.statusColor = "#E84D2E";
+            this.status = "Please enter the album's name first."
+        }
+        else if(!this.coverImage) {
+            this.showStatus = true;
+            this.statusColor = "#E84D2E";
+            this.status = "Please upload the album's cover photo."
+        }
+        else {
+            this.showStatus = true;
+            this.status = "Saving";
+            this.statusColor = "#193C2A";
+            const formData = new FormData();
+            
+            formData.append("track_name", this.track_title);
+            formData.append("album_id", this.final_album_id);
+            formData.append("artist_id", this.final_artist_id);
+            formData.append("image", this.coverImage, this.coverImage.name); // IMAGE FILE
+            formData.append("songs", this.track_BlobData, this.uploadTrackLabel); // AUDIO FILE
+
+            axios.post(`${this.$axios.defaults.baseURL}/api/track`, formData,{
+                headers: { 
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-Type": "multipart/form-data"
+                },
+                })
+                .then((res) => {
+                    this.status = res.data.message;
+                    console.log(res.data);
+                    console.log(res.status);
+                    console.log(res.data.message);
+                    if(res.status >= 200 && res.status <=299) {
+                        this.statusColor = "#00a651";
+                    }
+                    else if(res.status > 299) {
+                        this.statusColor = "#E84D2E";
+                    }
+                    // FETCH TRACKS
+                    this.$store.dispatch("getTracks");
+                });
+        }
+    },
     add_music_close() {
         this.$store.commit("open_modal_addTrack", false);
     },
@@ -112,12 +196,16 @@ methods: {
     },
     setArtist(data) {
         this.showArtist = false;
-        this.track_artist = data.name;
+        this.track_artist = data.artist_name;
+        this.findAlbums = data.artist_name;
+        this.final_artist_id = data.artist_id;
+        this.track_album = "Choose Album";
         // console.log(data);
     },
     setAlbums(data) {
         this.showAlbum = false;
-        this.track_album = data.name;
+        this.track_album = data.album_name;
+        this.final_album_id = data.album_id;
         // console.log(data);
     },
     previewImage(event) {
@@ -144,24 +232,39 @@ methods: {
     },
 },
 created() {
-    for(var b=0; b < 10; b++) {
-        this.track_albums.push(
-            {
-                id: "b"+b,
-                name: "Album no. "+b,
-                artist: "Artist"
-            }
-        );
+    // for(var b=0; b < 10; b++) {
+    //     this.track_albums.push(
+    //         {
+    //             id: "b"+b,
+    //             name: "Album no. "+b,
+    //             artist: "Artist"
+    //         }
+    //     );
+    // }
+    // for(var t=0; t < 10; t++) {
+    //     this.track_artists.push(
+    //         {
+    //             id: "t"+t,
+    //             name: "Artist no. "+t
+    //         }
+    //     );
+    // }
+},
+computed: {
+    ...mapGetters(
+        { 
+            track_albums: "list_album",
+            track_artists: "list_artist"
+        }
+    ),
+    albumz() {
+        return this.track_albums.filter(data => {
+            return (
+                String(data.artist_name).toLowerCase().includes(this.findAlbums.toLowerCase())
+            );
+        });
     }
-    for(var t=0; t < 10; t++) {
-        this.track_artists.push(
-            {
-                id: "t"+t,
-                name: "Artist no. "+t
-            }
-        );
-    }
-}
+},
 }
 </script>
 
