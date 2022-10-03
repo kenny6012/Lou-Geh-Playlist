@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="login-background">
-      <Loading v-if="showLoading" />
+      <!-- <Loading v-if="showLoading" /> -->
       <b-container fluid class="login-container">
         <div>
           <b-card class="login-card mt-3">
-            <b-form>
+            <div>
               <img class="login-card__image" src="/bfi_gradient.png" />
 
               <h6 class="login-card__title">
@@ -16,7 +16,7 @@
                 Version 1.0.2
               </div>
               <div>
-                <b-form-group>
+                <div>
                   <div class="login-card__center">
                     <div class="login-card__inputs">
                     
@@ -50,7 +50,7 @@
 
 
                     <button
-                      id="login_button"
+                      id=""
                       class="login-card__button"
                       @click="login()"
                       variant="success"
@@ -65,10 +65,10 @@
                   </div>
 
 
-                </b-form-group>
+                </div>
                 
               </div>
-            </b-form>
+            </div>
           </b-card>
         </div>
       </b-container>
@@ -92,6 +92,7 @@
 </template>
 
 <script>
+import axios from "axios";
 
 export default {
   name: "Login",
@@ -115,9 +116,8 @@ export default {
       icon: "eye"
     };
   },
-
-  computed: {
-
+  mounted() {
+    localStorage.token = "";
   },
   methods: {
     togglePassword() {
@@ -137,14 +137,74 @@ export default {
       this.alert = {
         showAlert: 3,
         dismissSecs: 2,
-
         variant,
         message
       };
     },
-    async login() {
-      
+    login() {
+      // this.$router.push({ path: "/musiclist" });
+      axios({
+            method: "POST",
+            url: `${this.$axios.defaults.baseURL}/api/login`,
+            headers: {"Access-Control-Allow-Origin": "*"},
+            data: {
+              username: this.user.name,
+              password: this.user.password
+            }
+        }).then(res => {
+            if(res.data.token != "" || res.data.token != undefined) {
+              this.$router.push({ path: "/musiclist" });
+              localStorage.token = res.data.token;
+              this.showAlert(
+                "Login: Success",
+                "success"
+              );
+            }
+        }).catch(error => {
+          this.showAlert(
+            "Login: Failed",
+            "success"
+          );
+          console.log(error);
+        });
     }
   }
 };
 </script>
+<style lang="scss">
+.alert {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+  z-index: 10000;
+  animation: fadein 0.4s;
+}
+.alert svg path {
+  color: white;
+}
+.alert-danger {
+  color: #fff;
+  background-color: red;
+  border-color: transparent;
+}
+.alert-success {
+  color: white;
+  background-color: green;
+  border-color: transparent;
+}
+@keyframes fadein {
+  0% {
+    opacity: 0%;
+    bottom: 1%;
+    right: 5%;
+  }
+  50% {
+    opacity: 50%;
+  }
+  100% {
+    opacity: 1000%;
+    bottom: 5%;
+    right: 5%;
+  }
+}
+</style>

@@ -2,23 +2,6 @@ import axios from "axios";
 // import moment from "moment";
 
 export default {
-    // async loginUser({ commit }, { email, password }) {
-    //     return await axios({
-    //       method: "PUT",
-    //       url: `${this.$axios.defaults.baseURL}/users/login`,
-    //       headers: {
-    //         "Access-Control-Allow-Origin": "*"
-    //       },
-    //       data: {
-    //         email,
-    //         password
-    //       }
-    //     }).then(res => {
-    //       commit("LOGIN_USER", res.data.patched);
-    //       // console.log(res.status);
-    //       return res;
-    //     });
-    //   },
     // FETCH LIST OF ARTIST 
     getArtitist({ commit }) {
         axios({
@@ -51,6 +34,10 @@ export default {
             headers: {"Access-Control-Allow-Origin": "*"},
         }).then(res => {
             commit("settracks", res.data);
+            var temp = res.data;
+            temp.sort((a, b) => { return b.numberofplays - a.numberofplays; });
+            commit("setTrackReport", temp);
+            
             // console.log(res.status);
             // console.log(res.data);
             return res;

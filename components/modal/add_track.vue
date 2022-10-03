@@ -134,7 +134,6 @@ methods: {
         this.final_album_id = "";
         this.final_artist_id = "";
         this.coverImage = [];
-        this.uploadTrackLabel = [];
         this.track_BlobData = [];
 
     },
@@ -149,6 +148,11 @@ methods: {
             this.statusColor = "#E84D2E";
             this.status = "Please upload the album's cover photo."
         }
+        else if(this.track_BlobData) {
+            this.showStatus = true;
+            this.statusColor = "#E84D2E";
+            this.status = "Please upload the track's audio file."
+        }
         else {
             this.showStatus = true;
             this.status = "Saving";
@@ -159,7 +163,7 @@ methods: {
             formData.append("album_id", this.final_album_id);
             formData.append("artist_id", this.final_artist_id);
             formData.append("image", this.coverImage, this.coverImage.name); // IMAGE FILE
-            formData.append("songs", this.track_BlobData, this.uploadTrackLabel); // AUDIO FILE
+            formData.append("songs", this.track_BlobData, this.track_BlobData.name); // AUDIO FILE
 
             axios.post(`${this.$axios.defaults.baseURL}/api/track`, formData,{
                 headers: { 
@@ -167,7 +171,7 @@ methods: {
                     "Content-Type": "multipart/form-data"
                 },
                 })
-                .then((res) => {
+                .then(res => {
                     this.status = res.data.message;
                     console.log(res.data);
                     console.log(res.status);
@@ -180,6 +184,11 @@ methods: {
                     }
                     // FETCH TRACKS
                     this.$store.dispatch("getTracks");
+                },
+                error => {
+                    this.statusColor = "#E84D2E";
+                    this.status = error.response.data.error;
+                    // console.log(error.response.data.error);
                 });
         }
     },

@@ -1,7 +1,7 @@
 <template>
 <div class="pages__layout">
     <!-- ADD BUTTON -->
-    <button class="pages__add" @click="add_artist()">
+    <button class="pages__add" @click="add_artist()" v-show="logged">
         <font-awesome-icon icon="plus" />
     </button>
 
@@ -17,7 +17,7 @@
         </div>
         <div class="pages__header2">       
             <button class="pages__logout">
-                <font-awesome-icon icon="power-off" />
+                <font-awesome-icon icon="power-off" @click="logout()"/>
             </button>
         </div>
     </div>
@@ -45,6 +45,7 @@ export default {
         return {
             find: "",
             link: this.$axios.defaults.baseURL,
+            logged: false,
             // artists: [
             //     {
             //         artist_id: 2,
@@ -56,6 +57,9 @@ export default {
         }
     },
     methods: {
+        logout() {
+            this.$router.push('/');
+        },
         add_artist() {
             this.$store.commit("open_modal_addArtist", true);
         }
@@ -65,6 +69,15 @@ export default {
     },
     mounted() {
         this.$store.commit("activePages", "nav_artist");
+        
+        if(localStorage.token[0]) {
+            // console.log("NOT EMPTY");
+            this.logged = true;
+        }
+        else {
+            // console.log("Empty");
+            this.logged = false;
+        }
     },
     computed: {
         ...mapGetters(

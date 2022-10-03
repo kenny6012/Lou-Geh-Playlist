@@ -16,12 +16,10 @@ export default {
         // console.log("==========================");
     },
     settracks(state, data) {
-        // console.log("==========================");
-        // console.log("state.list_tracks");
-        // console.log("==========================");
-        // console.log(data);
         state.list_tracks = data;
-        // console.log("==========================");
+    },
+    setTrackReport(state, data) {
+        state.list_tracks_reports = data;
     },
     activePages(state, data) {
         // console.log(data);
@@ -42,6 +40,9 @@ export default {
     },
     playTrack(state, data) {
         state.playing.play = data;
+    },
+    autoplay(state, data) {
+        state.autoPlay = data;
     },
     open_modal_addTrack(state, data) {
         state.open_add_track = data;

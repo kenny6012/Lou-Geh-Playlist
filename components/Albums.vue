@@ -1,7 +1,7 @@
 <template>
 <div class="pages__layout">
     <!-- ADD BUTTON -->
-    <button class="pages__add" @click="add_music()">
+    <button class="pages__add" @click="add_music()" v-show="logged">
         <font-awesome-icon icon="plus" />
     </button>
 
@@ -17,7 +17,7 @@
         </div>
         <div class="pages__header2">       
             <button class="pages__logout">
-                <font-awesome-icon icon="power-off" />
+                <font-awesome-icon icon="power-off" @click="logout()"/>
             </button>
         </div>
     </div>
@@ -47,6 +47,7 @@ export default {
         return {
             find: "",
             link: this.$axios.defaults.baseURL,
+            logged: false,
             // albums: [
             //     {
             //         album_id: 1,
@@ -59,6 +60,9 @@ export default {
         }
     },
     methods: {
+        logout() {
+            this.$router.push('/');
+        },
         add_music() {
             this.$store.commit("open_modal_addAlbum", true);
         }
@@ -68,6 +72,15 @@ export default {
     },
     mounted() {
         this.$store.commit("activePages", "nav_album");
+
+        if(localStorage.token[0]) {
+            // console.log("NOT EMPTY");
+            this.logged = true;
+        }
+        else {
+            // console.log("Empty");
+            this.logged = false;
+        }
     },
     computed: {
         ...mapGetters(
@@ -78,13 +91,13 @@ export default {
         albumz() {
             return this.albums.filter(data => {
                 return (
-                String(data.artist)
+                String(data.artist_name)
                     .toLowerCase()
                     .includes(this.find.toLowerCase()) ||
-                String(data.name)
+                String(data.album_name)
                     .toLowerCase()
                     .includes(this.find.toLowerCase()) ||
-                String(data.cover)
+                String(data.album_img)
                     .toLowerCase()
                     .includes(this.find.toLowerCase())
                 );

@@ -11,7 +11,7 @@
         </div>
         <div class="pages__header2">       
             <button class="pages__logout">
-                <font-awesome-icon icon="power-off" />
+                <font-awesome-icon icon="power-off" @click="logout()"/>
             </button>
         </div>
     </div>
@@ -29,23 +29,23 @@
                 </div>
             </div>
             <div class="play__topTrack">
-                <div class="play__top">
+                <div class="play__top" v-show="showTopTrack">
                     <div class="play__track1">
-                        <div class="play__topImg" :style="`background-image: url(${ trackz[0].cover })`"></div>
+                        <img :src="`${link}/${topTrack.track_img}`" :alt="`${link}/${topTrack.track_img}`" class="play__topImg" width="65px" height="65px">
                         <div class="play__trackInfo">
-                            <div class="play__topTitle">{{ trackz[0].name }}</div>
-                            <div class="play__topSub">{{ `${trackz[0].artist} | ${trackz[0].album}` }}</div>
+                            <div class="play__topTitle">{{ topTrack.track_name }}</div>
+                            <div class="play__topSub">{{ `${topTrack.artist_name} | ${topTrack.album_name}` }}</div>
                         </div>
                     </div>
                     <div class="play__track2">
                         <div class="play__trackInfo">
-                            <div class="play__topTitle">{{ trackz[0].played }}</div>
+                            <div class="play__topTitle">{{ topTrack.numberofplays }}</div>
                             <div class="play__topSub">Plays</div>
                         </div>
                     </div>
                     <div class="play__track3">
                         <div class="play__trackInfo">
-                            <div class="play__topTitle">{{ trackz[0].lastPlayed }}</div>
+                            <div class="play__topTitle">{{ "Date Here" }}</div>
                             <div class="play__topSub">Last Played</div>
                         </div>
                     </div>
@@ -53,23 +53,25 @@
             </div>
             <div class="play__scroll">
                 <div class="play__tracks">
-                    <div class="play__tracksContainer" v-for="(track, t) in trackz" :key="'t'+t" v-show="track.id != trackz[0].id">
+                    <div class="play__tracksContainer" v-for="(track, t) in trackz" :key="'t'+t" v-show="track.track_id != trackz[0].track_id">
                         <div class="play__track1">
-                            <div class="play__img" :style="`background-image: url(${ track.cover })`"></div>
+                            <!-- <div class="play__img" :style="`background-image: url(${ track.cover })`"></div> -->
+                            <img :src="`${link}/${track.track_img}`" :alt="`${link}/${track.track_img}`" class="play__img" width="40px" height="40px">
                             <div class="play__trackInfo1">
-                                <div class="play__title play__titleX">{{ track.name }}</div>
-                                <div class="play__sub">{{ `${track.artist} | ${track.album}` }}</div>
+                                <div class="play__title play__titleX">{{ track.track_name }}</div>
+                                <div class="play__sub">{{ `${track.artist_name} | ${track.album_name}` }}</div>
                             </div>
                         </div>
                         <div class="play__track2">
                             <div class="play__trackInfo">
-                                <div class="play__title">{{ track.played }}</div>
+                                <div class="play__title">{{ track.numberofplays }}</div>
                                 <div class="play__sub">Plays</div>
                             </div>
                         </div>
                         <div class="play__track3">
                             <div class="play__trackInfo">
-                                <div class="play__title">{{ track.lastPlayed }}</div>
+                                <!-- <div class="play__title">{{ track.lastPlayed }}</div> -->
+                                <div class="play__title">{{ "Date Here" }}</div>
                                 <div class="play__sub">Last Played</div>
                             </div>
                         </div>
@@ -82,70 +84,68 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
     data() {
         return {
             find: "",
-            tracks: [
-                {
-                    id: 'T0',
-                    name: "The Only Exception",
-                    artist: "Paramore",
-                    album: "Brand New Eyes",
-                    cover: "Paramore_Brand_New_Eyes.png",
-                    source: "Paramore_The_Only_Exception.mp3",
-                    play: false,
-                    played: 10000,
-                    lastPlayed: "Month 00, 0000",
-                },
-                {
-                    id: 'T1',
-                    name: "Brick by Boring Brick",
-                    artist: "Paramore",
-                    album: "Brand New Eyes",
-                    cover: "Paramore_Brand_New_Eyes.png",
-                    source: "Paramore_Brick_By_Boring_Brick.mp3",
-                    play: false,
-                    played: 10000,
-                    lastPlayed: "Month 00, 0000",
-                },
-            ],
+            link: this.$axios.defaults.baseURL,
+            topTrack: {},
+            showTopTrack: false,
+        }
+    },
+    watch: {
+        trackz() {
+            this.showTopTrack = true;
+            this.topTrack = this.$store.state.list_tracks_reports[0];
+        },
+        openTab() {
+            this.getTopTRack();
         }
     },
     created() {
-        for(var t=2; t <= 20; t++) {
-            this.tracks.push(
-                { 
-                    id: 'T'+t,
-                    name: "Track no. "+t,
-                    artist: "Artist",
-                    album: "Album",
-                    source: "",
-                    cover: "default_artwork.png",
-                    play: false,
-                    played: t + 232.51,
-                    lastPlayed: "Month 00, 0000",
+        this.getTopTRack();
+    },
+    methods: {
+        getTopTRack() {
+            var getTopTrack = setInterval(() => {
+                var temp = this.$store.state.list_tracks_reports[0];
+                if(temp) {
+                    this.showTopTrack = true;
+                    this.topTrack = temp;
+                    clearInterval(getTopTrack);
+                    console.log("testss");
                 }
-            );
-        }
+            }, 1);
+        },
+        logout() {
+            this.$router.push('/');
+        },
     },
     mounted() {
         this.$store.commit("activePages", "nav_admin");
     },
     computed: {
+        openTab() {
+            return this.$store.state.activePages;
+        },
+        tracks() {
+            return this.$store.state.list_tracks_reports;
+        },
         trackz() {
             return this.tracks.filter(data => {
                 return (
-                String(data.artist)
+                String(data.artist_name)
                     .toLowerCase()
                     .includes(this.find.toLowerCase()) ||
-                String(data.name)
+                String(data.track_name)
                     .toLowerCase()
                     .includes(this.find.toLowerCase()) ||
-                String(data.cover)
+                String(data.track_img)
                     .toLowerCase()
                     .includes(this.find.toLowerCase()) ||
-                String(data.album)
+                String(data.album_name)
                     .toLowerCase()
                     .includes(this.find.toLowerCase())
                 );

@@ -1,7 +1,7 @@
 <template>
 <div class="pages__layout">
     <!-- ADD BUTTON -->
-    <button class="pages__add" @click="add_music()">
+    <button class="pages__add" @click="add_music()" v-show="logged">
         <font-awesome-icon icon="plus" />
     </button>
 
@@ -17,7 +17,7 @@
         </div>
         <div class="pages__header2">       
             <button class="pages__logout">
-                <font-awesome-icon icon="power-off" />
+                <font-awesome-icon icon="power-off" @click="logout()"/>
             </button>
         </div>
     </div>
@@ -66,6 +66,7 @@ export default {
             find: "",
             find_album: "",
             link: this.$axios.defaults.baseURL,
+            logged: false,
             // tracks: [
             //     {
             //         track_id: 'T0',
@@ -81,6 +82,9 @@ export default {
         }
     },
     methods: {
+        logout() {
+            this.$router.push('/');
+        },
         add_music() {
             this.$store.commit("open_modal_addTrack", true);
         },
@@ -109,6 +113,7 @@ export default {
                     //     ]
                     // );
                     this.$store.commit("setToPlay", track);
+                    this.$store.commit("autoplay", true);
                     // console.log("test");
                     // this.$store.commit("playTrack", true); // PUT INSIDE MUTATION PARA SABAY
                 }
@@ -131,6 +136,15 @@ export default {
     },
     mounted() {
         this.$store.commit("activePages", "nav_music");
+
+        if(localStorage.token[0]) {
+            // console.log("NOT EMPTY");
+            this.logged = true;
+        }
+        else {
+            // console.log("Empty");
+            this.logged = false;
+        }
     },
     computed: {
         ...mapGetters(
@@ -146,13 +160,13 @@ export default {
                 String(data.artist)
                     .toLowerCase()
                     .includes(this.find.toLowerCase()) ||
-                String(data.name)
+                String(data.track_name)
                     .toLowerCase()
                     .includes(this.find.toLowerCase()) ||
-                String(data.cover)
+                String(data.track_img)
                     .toLowerCase()
                     .includes(this.find.toLowerCase()) ||
-                String(data.album)
+                String(data.album_name)
                     .toLowerCase()
                     .includes(this.find.toLowerCase())
                 );

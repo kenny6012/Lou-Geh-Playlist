@@ -151,6 +151,11 @@ methods: {
                     }
                     // FETCH ALBUMS
                     this.$store.dispatch("getAlbums");
+                },
+                error => {
+                    this.statusColor = "#E84D2E";
+                    this.status = error.response.data.error;
+                    // console.log(error.response.data.error);
                 });
         }
     },

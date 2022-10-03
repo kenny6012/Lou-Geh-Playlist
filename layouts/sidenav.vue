@@ -50,7 +50,8 @@ export default {
     },
     data() {
         return {
-            navigation: [
+            logged: false,
+            navigation2: [
                 {
                     id: "nav_music",
                     nav: "Music",
@@ -76,6 +77,26 @@ export default {
                     route: "../admin"
                 },
             ],
+            navigation: [
+                {
+                    id: "nav_music",
+                    nav: "Music",
+                    icon: "music",
+                    route: "../musiclist"
+                },
+                {
+                    id: "nav_album",
+                    nav: "Albums",
+                    icon: "compact-disc",
+                    route: "../albums"
+                },
+                {
+                    id: "nav_artist",
+                    nav: "Artists",
+                    icon: "user-circle",
+                    route: "../artists"
+                },
+            ],
         }
     },
     created() {
@@ -84,7 +105,15 @@ export default {
         this.$store.dispatch("getTracks");
     },
     mounted() {
-        
+        if(localStorage.token[0]) {
+            // console.log("NOT EMPTY");
+            this.logged = true;
+            this.navigation = this.navigation2;
+        }
+        else {
+            // console.log("Empty");
+            this.logged = false;
+        }
     },
     watch: {
         

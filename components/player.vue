@@ -116,12 +116,14 @@ methods: {
             this.play = false;
             this.player.pause();
             this.$store.commit("playTrack", false);
+            this.$store.commit("autoplay", false);
 
             this.current_time = this.player.currentTime;
         }
         else { // TO PLAY
             this.play = true;
             this.$store.commit("playTrack", true);
+            this.$store.commit("autoplay", true);
 
             this.playTrack();
         }
@@ -144,8 +146,15 @@ methods: {
                 this.player.currentTime = this.current_time;
 
                 // PLAY AUDIO
-                this.player.play();
-                var playerPromise = this.player.play();
+                if(this.autoPlay == true) {
+                    this.play = true;
+                    this.player.play();
+                    var playerPromise = this.player.play();
+                }
+                else {
+                    this.play = false;
+                    this.$store.commit("playTrack", false);
+                }
                 this.current_track = this.playNow;
 
                 // console.log(this.current_track);
@@ -171,24 +180,21 @@ methods: {
                 }
 
                 // IF TRACK HAS ENDED
-                // this.player.addEventListener(
-                //     "ended",
-                //     function() {
-                //         this.$store.commit("playTrack", false);
-                //     }
-                //     function() {
-                //         alert("Track has ended");
-                //     }
-                //     // function () {
-                //     //     this.index++;
-                //     //     if (this.index > this.songs.length - 1) {
-                //     //         this.index = 0;
-                //     //     }
+                this.player.addEventListener(
+                    "ended",
+                    function() {
+                        this.nextt();
+                    }
+                    // function () {
+                    //     this.index++;
+                    //     if (this.index > this.songs.length - 1) {
+                    //         this.index = 0;
+                    //     }
 
-                //     //     this.current = this.songs[this.index];
-                //     //     this.play(this.current);
-                //     // }.bind(this)
-                // );
+                    //     this.current = this.songs[this.index];
+                    //     this.play(this.current);
+                    // }.bind(this)
+                );
             }
             else {
                 alert("Track Not Found");
@@ -201,7 +207,7 @@ created() {
 },
 watch: {
     playNow() {
-        this.play = true;
+        // this.play = true;
         this.playTrack();
     },
     listTracks() {
@@ -212,10 +218,13 @@ watch: {
 },
 computed: {
     listTracks() {
-        return this.$store.state.list_tracks.reverse();
+        return this.$store.state.list_tracks;
     },
     playNow() {
         return this.$store.state.playing;
+    },
+    autoPlay() {
+        return this.$store.state.autoPlay;
     }
 }
 }
