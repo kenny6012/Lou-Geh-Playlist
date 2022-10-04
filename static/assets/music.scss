@@ -516,6 +516,9 @@ $critical: #E84D2E;
     }
 }
 .player {
+    &__timeProgress {
+        color: $common;
+    }
     &__layout {
         background: white;
         border-radius: 10px;
@@ -528,7 +531,7 @@ $critical: #E84D2E;
     }
     &__div1 {
         // border: 1px solid red;
-        width: calc(100% / 3);
+        width: calc(100% / 2.5);
         height: 100%;
         display: flex;
         align-items: center;
@@ -536,7 +539,7 @@ $critical: #E84D2E;
     }
     &__div2 {
         // border: 1px solid red;
-        width: calc(100% / 3);
+        width: calc(100% / 5);
         height: 100%;
         display: flex;
         align-items: center;
@@ -544,11 +547,11 @@ $critical: #E84D2E;
     }
     &__div3 {
         // border: 1px solid red;
-        width: calc(100% / 3);
+        width: calc(100% / 2.5);
         height: 100%;
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
     }
     &__trackImg {
         // border-radius: 1px solid red;

@@ -2,8 +2,6 @@
 <div class="player__layout">
     <div class="player__div1">
         
-        <!-- <img v-if="playNow.track_img || playNow" src="default_artwork.png" alt="Default Cover" class="player__trackImg" width="75px" height="75px">
-        <img v-else :src="`${link+playNow.track_img}`" :alt="`${link+playNow.track_img}`" class="player__trackImg" width="75px" height="75px"> -->
         <img 
             v-if="!playNow.track_img || !playNow" 
             src="default_artwork.png" 
@@ -40,13 +38,18 @@
         </div>
     </div>
     <div class="player__div3">
-
+        <div class="player__timeProgress">{{ secondsToMinutes(track_time) }}</div>
+        &emsp;
+        <input type="range" value="0" min="1" max="100" step="1" class="slider" id="test1">
+        &emsp;
+        <div class="player__timeProgress">{{ secondsToMinutes(track_progress) }}</div>
     </div>
 </div>
 </template>
 
 <script>
 import axios from "axios";
+import moment from 'moment';
 
 export default {
 data() {
@@ -56,10 +59,16 @@ data() {
         player: [],
         current_time: 0,
         current_track: [],
-        // listTracks: []
+
+        track_time: 0,
+        track_progress: 0,
     }
 },
 methods: {
+    secondsToMinutes(sec) {
+        return moment.utc(sec * 1000).format("mm:ss");
+
+    },
     prev() {
         var latestTrack = parseInt(this.listTracks.length) - 1;
         var trackIndex;
@@ -88,6 +97,8 @@ methods: {
     nextt() {
         var latestTrack = parseInt(this.listTracks.length) - 1;
         var trackIndex;
+
+        // alert("Na next?");
 
         // FIND THE CURRENT TRACK'S ID FROM THE LIST
         for(let x=0; x < this.listTracks.length; x++) {
@@ -134,8 +145,6 @@ methods: {
         if(this.playNow) {
             if(this.playNow.track_mp3 != "") {
 
-                // console.log(this.playNow.track_id+" - "+this.current_track.track_id);
-
                 if(this.playNow.track_id != this.current_track.track_id && this.current_track.track_id != undefined) {
                     // console.log("test");
                     this.current_track = [];
@@ -156,6 +165,50 @@ methods: {
 
                     // UPDATE NUMBER OF PLAYS
                     this.updateNumberOfPlays(this.playNow);
+
+                    // IF TRACK HAS ENDED
+                    var ref = this;
+                    this.player.addEventListener("ended", function() {
+                        ref.nextt();
+                    });
+
+                    const progressEl = document.querySelector('input[type="range"]');
+
+                    let mouseDownOnSlider = false;
+
+                    this.player.addEventListener("loadeddata", () => {
+                        progressEl.value = 0;
+                    });
+
+                    this.player.addEventListener("timeupdate", (e) => {
+                        if (!mouseDownOnSlider) {
+                            progressEl.value = this.player.currentTime / this.player.duration * 100;
+
+                            this.track_time = this.player.duration;
+                            this.track_progress = this.player.currentTime;
+
+                            progressEl.style.backgroundSize = (progressEl.value - 0) * 100 / (100 - 0) + '% 100%';
+                        }
+                        
+                    });
+
+                    progressEl.addEventListener("change", (e) => {
+                        const pct = progressEl.value / 100;
+                        this.player.currentTime = (this.player.duration || 0) * pct;
+
+                        this.track_time = this.player.duration;
+                        this.track_progress = this.player.currentTime;
+
+                        progressEl.style.backgroundSize = (progressEl.value - 0) * 100 / (100 - 0) + '% 100%';
+                    });
+
+                    progressEl.addEventListener("mousedown", () => {
+                        mouseDownOnSlider = true;   
+                    });
+                    progressEl.addEventListener("mouseup", () => {
+                        mouseDownOnSlider = false;
+                    });
+
                 }
                 else {
                     this.play = false;
@@ -185,22 +238,6 @@ methods: {
                     console.log("playerPromise is undefined");
                 }
 
-                // IF TRACK HAS ENDED
-                this.player.addEventListener(
-                    "ended",
-                    function() {
-                        this.nextt();
-                    }
-                    // function () {
-                    //     this.index++;
-                    //     if (this.index > this.songs.length - 1) {
-                    //         this.index = 0;
-                    //     }
-
-                    //     this.current = this.songs[this.index];
-                    //     this.play(this.current);
-                    // }.bind(this)
-                );
             }
             else {
                 alert("Track Not Found");
@@ -222,7 +259,6 @@ methods: {
                 numberofplays: latestCount
             }
         }).then(res => {
-            // console.log(res.data);
             this.$store.dispatch("getTracksForReports");
             latestCount = 0;
             currentCount = 0;
@@ -234,12 +270,10 @@ created() {
 },
 watch: {
     playNow() {
-        // this.play = true;
         this.playTrack();
     },
     listTracks() {
         var firstTrack = this.$store.state.list_tracks;
-        // console.log(firstTrack);
         this.$store.commit("currentTrack", firstTrack[0]);
     }
 },
@@ -257,6 +291,41 @@ computed: {
 }
 </script>
 
-<style>
+<style lang="scss">
+.slidecontainer {
+  width: 100%;
+}
+
+input[type=range] {
+    outline: none;
+    padding: 0;
+    width: 250px;
+    height: 8px;
+    background-color: #ECF2EA;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #A0B0A5), color-stop(100%, #A0B0A5));
+    background-size: 1% 100%;
+    background-repeat: no-repeat;
+    border-radius: 10px;
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    -webkit-appearance: none;
+}
+
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 8px;
+    height: 8px;
+    background: #A0B0A5;
+    border-radius: 10px;
+    cursor: pointer;
+}
 
 </style>

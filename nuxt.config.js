@@ -39,6 +39,10 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: { postcss: null },
 
+  server: {
+    port: 3301,
+  },
+
   axios: {
     baseURL: "http://172.16.28.8:3000"
   },
