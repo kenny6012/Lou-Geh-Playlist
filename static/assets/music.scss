@@ -998,7 +998,7 @@ $critical: #E84D2E;
     }
     &__track2 {
         // border: 1px solid red;
-        width: 27.5%;
+        width: 13.75%;
         height: 50px;
         display: flex;
         align-items: center;
@@ -1006,6 +1006,15 @@ $critical: #E84D2E;
         text-align: center;
     }
     &__track3 {
+        // border: 1px solid red;
+        width: 13.75%;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    &__track4 {
         // border: 1px solid red;
         width: 27.5%;
         height: 50px;

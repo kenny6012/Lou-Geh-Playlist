@@ -45,6 +45,12 @@
                     </div>
                     <div class="play__track3">
                         <div class="play__trackInfo">
+                            <div class="play__topTitle">{{ secondsToMinutes(topTrack.track_length) }}</div>
+                            <div class="play__topSub">Duration</div>
+                        </div>
+                    </div>
+                    <div class="play__track4">
+                        <div class="play__trackInfo">
                             <div class="play__topTitle">{{ dateFormat(topTrack.lastplayed) }}</div>
                             <div class="play__topSub">Last Played</div>
                         </div>
@@ -63,7 +69,7 @@
                         <div class="play__track1">
                             <!-- <div class="play__img" :style="`background-image: url(${ track.cover })`"></div> -->
                             <img :src="`${link}/${track.track_img}`" :alt="`${link}/${track.track_img}`" class="play__img" width="40px" height="40px">
-                            <div class="play__trackInfo1">
+                            <div class="play__trackInfo">
                                 <div class="play__title play__titleX">{{ track.track_name }}</div>
                                 <div class="play__sub">{{ `${track.artist_name} | ${track.album_name}` }}</div>
                             </div>
@@ -75,6 +81,12 @@
                             </div>
                         </div>
                         <div class="play__track3">
+                            <div class="play__trackInfo">
+                                <div class="play__title">{{ secondsToMinutes(track.track_length) }}</div>
+                                <div class="play__sub">Duration</div>
+                            </div>
+                        </div>
+                        <div class="play__track4">
                             <div class="play__trackInfo">
                                 <!-- <div class="play__title">{{ track.lastPlayed }}</div> -->
                                 <div class="play__title">{{ (track.lastplayed != null ? dateFormat(track.lastplayed):'Not Played Yet') }}</div>
@@ -115,6 +127,9 @@ export default {
         this.getTopTRack();
     },
     methods: {
+        secondsToMinutes(sec) {
+            return moment.utc(sec * 1000).format("mm:ss");
+        },
         dateFormat(date) {
             if(date === null || date == null) {
                 return "Not PLayed Yet"

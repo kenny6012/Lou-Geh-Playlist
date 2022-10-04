@@ -162,9 +162,6 @@ methods: {
                     this.player.play();
                     var playerPromise = this.player.play();
 
-                    // UPDATE NUMBER OF PLAYS
-                    this.updateNumberOfPlays(this.playNow);
-
                     // IF TRACK HAS ENDED
                     var ref = this;
                     this.player.addEventListener("ended", function() {
@@ -184,7 +181,7 @@ methods: {
                             progressEl.value = this.player.currentTime / this.player.duration * 100;
 
                             
-                            console.log(this.track_time+" - "+this.track_progress);
+                            // console.log(this.track_time+" - "+this.track_progress);
                             if(!Number.isNaN(this.player.duration)) {
                                 this.track_time = this.player.duration;
                                 this.track_progress = this.player.currentTime;
@@ -200,7 +197,7 @@ methods: {
                         const pct = progressEl.value / 100;
                         this.player.currentTime = (this.player.duration || 0) * pct;
 
-                        console.log(this.track_time+" - "+this.track_progress);
+                        // console.log(this.track_time+" - "+this.track_progress);
                         if(!Number.isNaN(this.player.duration)) {
                             this.track_time = this.player.duration;
                             this.track_progress = this.player.currentTime;
@@ -215,6 +212,9 @@ methods: {
                     progressEl.addEventListener("mouseup", () => {
                         mouseDownOnSlider = false;
                     });
+
+                    // UPDATE NUMBER OF PLAYS
+                    this.updateNumberOfPlays(this.playNow);
 
                 }
                 else {
@@ -263,7 +263,8 @@ methods: {
             url: `${this.$axios.defaults.baseURL}/api/track/play/${track.track_id}`,
             headers: {"Access-Control-Allow-Origin": "*"},
             data: {
-                numberofplays: latestCount
+                numberofplays: latestCount,
+                track_length: this.track_time
             }
         }).then(res => {
             this.$store.dispatch("getTracksForReports");
