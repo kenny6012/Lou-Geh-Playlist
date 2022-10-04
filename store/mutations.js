@@ -52,5 +52,11 @@ export default {
     },
     open_modal_addAlbum(state, data) {
         state.open_add_album = data;
-    }
+    },
+    update_track(state, data) {
+        state.update_track = data;
+    },
+    track_updater(state, data) {
+        state.track_update = data;
+    },
 };

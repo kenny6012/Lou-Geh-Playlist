@@ -67,17 +67,6 @@ export default {
             find_album: "",
             link: this.$axios.defaults.baseURL,
             logged: false,
-            // tracks: [
-            //     {
-            //         track_id: 'T0',
-            //         track_name: "The Only Exception",
-            //         artist_name: "Paramore",
-            //         album_name: "Brand New Eyes",
-            //         track_img: "Paramore_Brand_New_Eyes.png",
-            //         track_mp3: "Paramore_The_Only_Exception.mp3",
-            //         play: false
-            //     },
-            // ],
             
         }
     },
@@ -91,48 +80,14 @@ export default {
         playNow(track) {
             if(track != "") {
                 if(track.track_mp3 != "") {
-                    // console.log("=============================");
-                    // console.log("setToPlay");
-                    // console.log("=============================");
-                    // console.log(track);
-                    // console.log("=============================");
-                    // var test = [];
-                    // test.push(
-                    //     [
-                    //         {
-                    //             track_id: 3,
-                    //             track_name: "divide",
-                    //             artist_name: "Ed Sheeran",
-                    //             album_name: "Divide",
-                    //             track_img: "uploads/track_img/default_disc.jpg",
-                    //             track_mp3: "uploads/track_songs/Ed Sheeran - Divide - Dive.mp3",
-                    //             play: false,
-                    //             numberofplays: 0,
-                    //             status: "active    "
-                    //         }
-                    //     ]
-                    // );
                     this.$store.commit("setToPlay", track);
                     this.$store.commit("autoplay", true);
-                    // console.log("test");
-                    // this.$store.commit("playTrack", true); // PUT INSIDE MUTATION PARA SABAY
                 }
             }
         }
     },
     created() {
-        // "track_id": 1,
-        // "track_name": "track 1",
-        // "artist_name": "Paramore",
-        // "album_name": "Multiply",
-        // "track_img": "uploads/track_img/FB_IMG_1637056637737.png",
-        // "track_mp3": "uploads/track_songsOgPEX5LyJQs_48.mp3",
-        // "play": false,
-        // "numberofplays": 0,
-        // "status": "active   
 
-        
-        // this.$store.dispatch("getTracks");
     },
     mounted() {
         this.$store.commit("activePages", "nav_music");

@@ -46,6 +46,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
 data() {
     return {
@@ -140,6 +142,7 @@ methods: {
                     this.player.pause();
                     this.current_time = 0;
                 }
+
                 
                 // GET AUDIO
                 this.player = new Audio(this.link+this.playNow.track_mp3);
@@ -150,6 +153,9 @@ methods: {
                     this.play = true;
                     this.player.play();
                     var playerPromise = this.player.play();
+
+                    // UPDATE NUMBER OF PLAYS
+                    this.updateNumberOfPlays(this.playNow);
                 }
                 else {
                     this.play = false;
@@ -201,6 +207,27 @@ methods: {
             }
         }
     },
+    updateNumberOfPlays(track) {
+        // GET CURRENT NUMBER OF PLAYS
+        // console.log(track.track_name);
+        // console.log(track.numberofplays);
+        var currentCount = parseInt(track.numberofplays);
+        var latestCount = currentCount + 1;
+
+        axios({
+            method: "PATCH",
+            url: `${this.$axios.defaults.baseURL}/api/track/play/${track.track_id}`,
+            headers: {"Access-Control-Allow-Origin": "*"},
+            data: {
+                numberofplays: latestCount
+            }
+        }).then(res => {
+            // console.log(res.data);
+            this.$store.dispatch("getTracksForReports");
+            latestCount = 0;
+            currentCount = 0;
+        });
+    }
 },
 created() {
     // this.listTracks =  this.$store.state.list_tracks;

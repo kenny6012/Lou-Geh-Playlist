@@ -3,6 +3,7 @@
     <AddTrack v-show="add_track"/>
     <AddArtist v-show="add_artist"/>
     <AddAlbum v-show="add_album"/>
+    <EditTRack v-show="edit_track"/>
     <div class="sidenav__body">
         <div class="sidenav__bar">
             <div class="sidenav__logo">
@@ -40,6 +41,7 @@ import Player from "~/components/player.vue";
 import AddTrack from "~/components/modal/add_track.vue";
 import AddArtist from "~/components/modal/add_artist.vue";
 import AddAlbum from "~/components/modal/add_album.vue";
+import EditTRack from "~/components/modal/edit_track.vue";
 
 export default {
     components: {
@@ -47,6 +49,7 @@ export default {
         AddTrack,
         AddArtist,
         AddAlbum,
+        EditTRack
     },
     data() {
         return {
@@ -103,6 +106,7 @@ export default {
         this.$store.dispatch("getArtitist");
         this.$store.dispatch("getAlbums");
         this.$store.dispatch("getTracks");
+        this.$store.dispatch("getTracksForReports");
     },
     mounted() {
         if(localStorage.token[0]) {
@@ -131,6 +135,8 @@ export default {
                 add_track: "open_add_track",
                 add_artist: "open_add_artist",
                 add_album: "open_add_album",
+
+                edit_track: "open_edit_track",
 
                 tracks: "list_tracks"
             }

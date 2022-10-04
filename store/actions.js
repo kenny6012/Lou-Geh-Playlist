@@ -10,9 +10,6 @@ export default {
             headers: {"Access-Control-Allow-Origin": "*"},
         }).then(res => {
             commit("setArtist", res.data);
-            // console.log(res.status);
-            // console.log(res.data);
-            return res;
         });
     },
     getAlbums({ commit }) {
@@ -22,9 +19,6 @@ export default {
             headers: {"Access-Control-Allow-Origin": "*"},
         }).then(res => {
             commit("setalbum", res.data);
-            // console.log(res.status);
-            // console.log(res.data);
-            return res;
         });
     },
     getTracks({ commit }) {
@@ -33,14 +27,19 @@ export default {
             url: `${this.$axios.defaults.baseURL}/api/track`,
             headers: {"Access-Control-Allow-Origin": "*"},
         }).then(res => {
-            commit("settracks", res.data);
+            commit("settracks", res.data.reverse());
+        });
+    },
+    getTracksForReports({ commit }) {
+        axios({
+            method: "GET",
+            url: `${this.$axios.defaults.baseURL}/api/track`,
+            headers: {"Access-Control-Allow-Origin": "*"},
+        }).then(res => {
+            // console.log("Test");
             var temp = res.data;
             temp.sort((a, b) => { return b.numberofplays - a.numberofplays; });
             commit("setTrackReport", temp);
-            
-            // console.log(res.status);
-            // console.log(res.data);
-            return res;
         });
     },
     

@@ -13,5 +13,8 @@ export default () => ({
     open_add_track: false,
     open_add_artist: false,
     open_add_album: false,
+
+    update_track: false,
+    track_update: [],
 });
   

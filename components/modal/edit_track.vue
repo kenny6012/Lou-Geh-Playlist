@@ -6,7 +6,7 @@
                     <font-awesome-icon icon="music" /> &ensp; Music
                 </div>
                 <div class="modal__header2">
-                    <font-awesome-icon class="modal__close" icon="times-circle" @click="add_music_close()"/>
+                    <font-awesome-icon class="modal__close" icon="times-circle" @click="edit_track_close()"/>
                 </div>
             </div>
             <div class="modal__body">
@@ -54,8 +54,6 @@
                         </div>
                     </div>
 
-                    <input type="button" :value="uploadTrackLabel" class="modal__uploadTrack" @click="$refs.uploadTrack.click()" />
-                    <input id="uploadTrack" ref="uploadTrack" style="display: none" type="file" accept=".mp3,audio/*" @change="uploadTrack($event)" />
                 </div>
 
 
@@ -69,7 +67,7 @@
                     </div>
                 </div>
                 <div class="modal__footer2">
-                    <input class="modal__buttonCancel" type="button" value="Clear" @click="clearFields()">
+                    <input class="modal__buttonCancel" type="button" value="Revert" @click="assign_track_info()">
                     <input class="modal__buttonSave" type="button" value="Save" @click="saveTrack()">
                 </div>
             </div>
@@ -108,6 +106,7 @@ data() {
         final_artist_id: "",
         // track_artists: [],
         // track_albums: [],
+        link: this.$axios.defaults.baseURL+"/",
     }
 },
 methods: {
@@ -137,22 +136,31 @@ methods: {
         this.track_BlobData = [];
 
     },
+    assign_track_info() {
+        console.log(this.track_info);
+        this.uploadImageLabel = "Upload New Cover";
+        // this.imageData = this.link+this.track_info.track_img;
+
+        this.track_title = this.track_info.track_name;
+        this.track_artist = this.track_info.artist_name;
+        this.track_album = this.track_info.album_name;
+
+        this.final_album_id = this.track_info.album_id;
+        this.final_artist_id = this.track_info.artist_id;
+
+        this.findAlbums = this.track_info.artist_name;
+    },
     saveTrack() {
-        if(this.track_album == "") {
+        if(this.track_title == "") {
             this.showStatus = true;
             this.statusColor = "#E84D2E";
-            this.status = "Please enter the album's name first."
+            this.status = "Please enter the track's name first."
         }
         else if(!this.coverImage) {
             this.showStatus = true;
             this.statusColor = "#E84D2E";
             this.status = "Please upload the album's cover photo."
         }
-        // else if(this.track_BlobData) {
-        //     this.showStatus = true;
-        //     this.statusColor = "#E84D2E";
-        //     this.status = "Please upload the track's audio file."
-        // }
         else {
             this.showStatus = true;
             this.status = "Saving";
@@ -163,9 +171,9 @@ methods: {
             formData.append("album_id", this.final_album_id);
             formData.append("artist_id", this.final_artist_id);
             formData.append("image", this.coverImage, this.coverImage.name); // IMAGE FILE
-            formData.append("songs", this.track_BlobData, this.uploadTrackLabel); // AUDIO FILE
 
-            axios.post(`${this.$axios.defaults.baseURL}/api/track`, formData,{
+
+            axios.patch(`${this.$axios.defaults.baseURL}/api/track/${this.track_info.track_id}`, formData,{
                 headers: { 
                     "Access-Control-Allow-Origin": "*",
                     "Content-Type": "multipart/form-data"
@@ -183,18 +191,25 @@ methods: {
                         this.statusColor = "#E84D2E";
                     }
                     // FETCH TRACKS
-                    this.$store.dispatch("getTracks");
                     this.$store.dispatch("getTracksForReports");
+
+                    // CLEAR FIELDS
+                    this.clearFields();
+
+                    // CLOSE
+                    this.edit_track_close();
                 },
                 error => {
                     this.statusColor = "#E84D2E";
                     this.status = error.response.data.error;
-                    // console.log(error.response.data.error);
+                    console.log(error);
                 });
         }
     },
-    add_music_close() {
-        this.$store.commit("open_modal_addTrack", false);
+    edit_track_close() {
+        console.log("test");
+        this.findAlbums = "";
+        this.$store.commit("update_track", false);
     },
     showArtists() {
         this.showArtist = !this.showArtist;
@@ -219,6 +234,7 @@ methods: {
         // console.log(data);
     },
     previewImage(event) {
+        console.log("test");
         this.uploadImageLabel = "";
         var input = event.target;
         if (input.files && input.files[0]) {
@@ -230,49 +246,33 @@ methods: {
             this.coverImage = input.files[0];
         }
     },
-    uploadTrack(event) {
-      var input = event.target;
-      if (input.files && input.files[0]) {
-        // IMAGE NAME
-        this.uploadTrackLabel = input.files[0].name;
-
-        // IMAGE BLOB
-        this.track_BlobData = input.files[0];
-      }
-    },
 },
-created() {
-    // for(var b=0; b < 10; b++) {
-    //     this.track_albums.push(
-    //         {
-    //             id: "b"+b,
-    //             name: "Album no. "+b,
-    //             artist: "Artist"
-    //         }
-    //     );
-    // }
-    // for(var t=0; t < 10; t++) {
-    //     this.track_artists.push(
-    //         {
-    //             id: "t"+t,
-    //             name: "Artist no. "+t
-    //         }
-    //     );
-    // }
+watch: {
+    open_edit_track() {
+        this. assign_track_info();
+    }
 },
 computed: {
     ...mapGetters(
         { 
+            track_info: "update_tracks",
+
             track_albums: "list_album",
-            track_artists: "list_artist",
+            track_artists: "list_artist"
         }
     ),
+    open_edit_track() {
+        return this.$store.state.update_track;
+    },
     albumz() {
-        return this.track_albums.filter(data => {
-            return (
-                String(data.artist_name).toLowerCase().includes(this.findAlbums.toLowerCase())
-            );
-        });
+        if(this.track_albums.length > -1) {
+            return this.track_albums.filter(data => {
+                return (
+                    String(data.artist_name).includes(this.findAlbums)
+                );
+            });
+        }
+        
     }
 },
 }

@@ -1,3 +1,5 @@
+import state from "./state";
+
 export default {
     // allUsers(state) {
     //   return state.usersState;
@@ -22,5 +24,11 @@ export default {
     },
     open_add_album(state) {
       return state.open_add_album;
+    },
+    open_edit_track(state) {
+      return state.update_track;
+    },
+    update_tracks(state) {
+      return state.track_update;
     }
   };

@@ -6,7 +6,7 @@
                 <div class="pages__searchIcon">
                     <font-awesome-icon icon="search" />
                 </div>
-                <input class="pages__searchInput" type="text" placeholder="Search tracks here...">
+                <input class="pages__searchInput" type="text" placeholder="Search tracks here..." v-model="find">
             </div>
         </div>
         <div class="pages__header2">       
@@ -25,11 +25,11 @@
                     <input class="play__buttons" type="button" value="Generate Report">
                     <input class="play__buttons" type="button" value="Add Artist">
                     <input class="play__buttons" type="button" value="Add Album">
-                    <input class="play__buttons" type="button" value="Add Track">
+                    <input class="play__buttons" type="button" value="Add Track" @click="add_music()">
                 </div>
             </div>
             <div class="play__topTrack">
-                <div class="play__top" v-show="showTopTrack">
+                <div class="play__top" v-show="showTopTrack && !find" @click="update_track(topTrack)">
                     <div class="play__track1">
                         <img :src="`${link}/${topTrack.track_img}`" :alt="`${link}/${topTrack.track_img}`" class="play__topImg" width="65px" height="65px">
                         <div class="play__trackInfo">
@@ -45,7 +45,7 @@
                     </div>
                     <div class="play__track3">
                         <div class="play__trackInfo">
-                            <div class="play__topTitle">{{ "Date Here" }}</div>
+                            <div class="play__topTitle">{{ dateFormat(topTrack.lastplayed) }}</div>
                             <div class="play__topSub">Last Played</div>
                         </div>
                     </div>
@@ -53,7 +53,13 @@
             </div>
             <div class="play__scroll">
                 <div class="play__tracks">
-                    <div class="play__tracksContainer" v-for="(track, t) in trackz" :key="'t'+t" v-show="track.track_id != trackz[0].track_id">
+
+                    <div class="play__tracksContainer" 
+                        v-for="(track, t) in trackz" 
+                        :key="'t'+t" 
+                        v-show="track.track_id != trackz[0].track_id"
+                        @click="update_track(track)">
+
                         <div class="play__track1">
                             <!-- <div class="play__img" :style="`background-image: url(${ track.cover })`"></div> -->
                             <img :src="`${link}/${track.track_img}`" :alt="`${link}/${track.track_img}`" class="play__img" width="40px" height="40px">
@@ -71,7 +77,7 @@
                         <div class="play__track3">
                             <div class="play__trackInfo">
                                 <!-- <div class="play__title">{{ track.lastPlayed }}</div> -->
-                                <div class="play__title">{{ "Date Here" }}</div>
+                                <div class="play__title">{{ (track.lastplayed != null ? dateFormat(track.lastplayed):'Not Played Yet') }}</div>
                                 <div class="play__sub">Last Played</div>
                             </div>
                         </div>
@@ -85,6 +91,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import moment from "moment";
 
 export default {
     data() {
@@ -108,6 +115,22 @@ export default {
         this.getTopTRack();
     },
     methods: {
+        dateFormat(date) {
+            if(date === null || date == null) {
+                return "Not PLayed Yet"
+            }
+            else {
+                return moment(date).format("MMMM DD, YYYY");
+            }
+        },
+        add_music() {
+            this.$store.commit("open_modal_addTrack", true);
+        },
+        update_track(track) {
+            // console.log(track);
+            this.$store.commit("update_track", true);
+            this.$store.commit("track_updater", track);
+        },
         getTopTRack() {
             var getTopTrack = setInterval(() => {
                 var temp = this.$store.state.list_tracks_reports[0];
@@ -115,7 +138,7 @@ export default {
                     this.showTopTrack = true;
                     this.topTrack = temp;
                     clearInterval(getTopTrack);
-                    console.log("testss");
+                    // console.log("testss");
                 }
             }, 1);
         },
