@@ -1,7 +1,7 @@
 <template>
 <div class="player__layout">
     <div class="player__div1">
-        
+
         <img 
             v-if="!playNow.track_img || !playNow" 
             src="default_artwork.png" 
@@ -67,7 +67,6 @@ data() {
 methods: {
     secondsToMinutes(sec) {
         return moment.utc(sec * 1000).format("mm:ss");
-
     },
     prev() {
         var latestTrack = parseInt(this.listTracks.length) - 1;
@@ -184,10 +183,15 @@ methods: {
                         if (!mouseDownOnSlider) {
                             progressEl.value = this.player.currentTime / this.player.duration * 100;
 
-                            this.track_time = this.player.duration;
-                            this.track_progress = this.player.currentTime;
+                            
+                            console.log(this.track_time+" - "+this.track_progress);
+                            if(!Number.isNaN(this.player.duration)) {
+                                this.track_time = this.player.duration;
+                                this.track_progress = this.player.currentTime;
+                                progressEl.style.backgroundSize = (progressEl.value - 0) * 100 / (100 - 0) + '% 100%';
+                            }
 
-                            progressEl.style.backgroundSize = (progressEl.value - 0) * 100 / (100 - 0) + '% 100%';
+
                         }
                         
                     });
@@ -196,10 +200,13 @@ methods: {
                         const pct = progressEl.value / 100;
                         this.player.currentTime = (this.player.duration || 0) * pct;
 
-                        this.track_time = this.player.duration;
-                        this.track_progress = this.player.currentTime;
+                        console.log(this.track_time+" - "+this.track_progress);
+                        if(!Number.isNaN(this.player.duration)) {
+                            this.track_time = this.player.duration;
+                            this.track_progress = this.player.currentTime;
+                            progressEl.style.backgroundSize = (progressEl.value - 0) * 100 / (100 - 0) + '% 100%';
+                        }
 
-                        progressEl.style.backgroundSize = (progressEl.value - 0) * 100 / (100 - 0) + '% 100%';
                     });
 
                     progressEl.addEventListener("mousedown", () => {
@@ -323,7 +330,7 @@ input[type=range]::-webkit-slider-thumb {
     appearance: none;
     width: 8px;
     height: 8px;
-    background: #A0B0A5;
+    background: transparent;
     border-radius: 10px;
     cursor: pointer;
 }
