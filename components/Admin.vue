@@ -22,7 +22,7 @@
                     Most Played
                 </div>
                 <div class="play__header2">
-                    <input class="play__buttons" type="button" value="Generate Report">
+                    <input class="play__buttons" type="button" value="Generate Report" @click="generateReport()">
                     <input class="play__buttons" type="button" value="Add Artist">
                     <input class="play__buttons" type="button" value="Add Album">
                     <input class="play__buttons" type="button" value="Add Track" @click="add_music()">
@@ -127,6 +127,9 @@ export default {
         this.getTopTRack();
     },
     methods: {
+        generateReport() {
+            window.open(`/Report?`);
+        },
         secondsToMinutes(sec) {
             return moment.utc(sec * 1000).format("mm:ss");
         },
