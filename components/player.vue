@@ -156,6 +156,13 @@ methods: {
                 this.player = new Audio(this.link+this.playNow.track_mp3);
                 this.player.currentTime = this.current_time;
 
+                if(this.track_time > 0 || this.track_time > "0") {
+                    setTimeout(() => {
+                        // UPDATE NUMBER OF PLAYS
+                        this.updateNumberOfPlays();
+                    }, 2000);
+                }
+                
                 // PLAY AUDIO
                 if(this.autoPlay == true) {
                     this.play = true;
@@ -213,9 +220,6 @@ methods: {
                         mouseDownOnSlider = false;
                     });
 
-                    // UPDATE NUMBER OF PLAYS
-                    this.updateNumberOfPlays(this.playNow);
-
                 }
                 else {
                     this.play = false;
@@ -251,16 +255,16 @@ methods: {
             }
         }
     },
-    updateNumberOfPlays(track) {
+    updateNumberOfPlays() {
         // GET CURRENT NUMBER OF PLAYS
-        // console.log(track.track_name);
+        console.log("track: "+this.playNow.track_name+" - Sec: "+this.track_time);
         // console.log(track.numberofplays);
-        var currentCount = parseInt(track.numberofplays);
+        var currentCount = parseInt(this.playNow.numberofplays);
         var latestCount = currentCount + 1;
 
         axios({
             method: "PATCH",
-            url: `${this.$axios.defaults.baseURL}/api/track/play/${track.track_id}`,
+            url: `${this.$axios.defaults.baseURL}/api/track/play/${this.playNow.track_id}`,
             headers: {"Access-Control-Allow-Origin": "*"},
             data: {
                 numberofplays: latestCount,
@@ -279,6 +283,7 @@ created() {
 watch: {
     playNow() {
         this.playTrack();
+        
     },
     listTracks() {
         var firstTrack = this.$store.state.list_tracks;
