@@ -23,8 +23,8 @@
                 </div>
                 <div class="play__header2">
                     <input class="play__buttons" type="button" value="Generate Report" @click="generateReport()">
-                    <input class="play__buttons" type="button" value="Add Artist">
-                    <input class="play__buttons" type="button" value="Add Album">
+                    <input class="play__buttons" type="button" value="Add Artist" @click="add_artist()">
+                    <input class="play__buttons" type="button" value="Add Album" @click="add_album()">
                     <input class="play__buttons" type="button" value="Add Track" @click="add_music()">
                 </div>
             </div>
@@ -140,6 +140,12 @@ export default {
             else {
                 return moment(date).format("MMMM DD, YYYY");
             }
+        },
+        add_artist() {
+            this.$store.commit("open_modal_addArtist", true);
+        },
+        add_album() {
+            this.$store.commit("open_modal_addAlbum", true);
         },
         add_music() {
             this.$store.commit("open_modal_addTrack", true);

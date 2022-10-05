@@ -663,6 +663,15 @@ $critical: #E84D2E;
         font-family: font_B;
         color: $main;
     }
+    &__header11 {
+        // border: 1px solid red;
+        width: 50%;
+        height: 100%;
+        text-align: left;
+        font-size: 20px;
+        font-family: font_B;
+        color: $emphasize_main;
+    }
     &__header2 {
         // border: 1px solid red;
         width: 50%;
@@ -847,6 +856,24 @@ $critical: #E84D2E;
             color: white;
             transition: 0.2s;
             background: $BFI1;
+        }
+    } 
+    &__buttonSave2 {
+        border: 0;
+        padding-right: 10px;
+        height: 40px;
+        width: fit-content;
+        padding-left: 20px;
+        padding-right: 20px;
+        margin-left: 10px;
+        border-radius: 5px;
+        transition: 0.2s;
+        color: white;
+        background: $emphasize;
+        &:hover {
+            color: white;
+            transition: 0.2s;
+            background: $emphasize_main;
         }
     } 
 }

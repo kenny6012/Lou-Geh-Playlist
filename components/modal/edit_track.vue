@@ -2,8 +2,8 @@
 <div class="modal__layout">
     <div class="modal__container">
             <div class="modal__header">
-                <div class="modal__header1">
-                    <font-awesome-icon icon="music" /> &ensp; Music
+                <div class="modal__header11">
+                    <font-awesome-icon icon="music" /> &ensp; Edit Track info
                 </div>
                 <div class="modal__header2">
                     <font-awesome-icon class="modal__close" icon="times-circle" @click="edit_track_close()"/>
@@ -68,7 +68,7 @@
                 </div>
                 <div class="modal__footer2">
                     <input class="modal__buttonCancel" type="button" value="Revert" @click="assign_track_info()">
-                    <input class="modal__buttonSave" type="button" value="Save" @click="saveTrack()">
+                    <input class="modal__buttonSave2" type="button" value="Save" @click="saveTrack()">
                 </div>
             </div>
     </div>
