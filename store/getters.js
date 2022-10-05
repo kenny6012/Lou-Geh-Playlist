@@ -31,11 +31,17 @@ export default {
     open_edit_album(state) {
       return state.update_album;
     },
+    open_edit_artist(state) {
+      return state.update_artist;
+    },
     update_tracks(state) {
       return state.track_update;
     },
     update_album(state) {
       return state.current_album;
+    },
+    update_artist(state) {
+      return state.current_artist;
     },
     get_current_album(state) {
       return state.current_album;

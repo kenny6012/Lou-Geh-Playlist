@@ -59,6 +59,9 @@ export default {
     update_album(state, data) {
         state.update_album = data;
     },
+    update_artist(state, data) {
+        state.update_artist = data;
+    },
     track_updater(state, data) {
         state.track_update = data;
     },

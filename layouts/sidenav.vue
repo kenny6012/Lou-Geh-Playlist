@@ -5,6 +5,7 @@
     <AddAlbum v-show="add_album"/>
     <EditTRack v-show="edit_track"/>
     <EditAlbum v-show="edit_album"/>
+    <EditArtist v-show="edit_artist"/>
     <div class="sidenav__body">
         <div class="sidenav__bar">
             <div class="sidenav__logo">
@@ -44,6 +45,7 @@ import AddArtist from "~/components/modal/add_artist.vue";
 import AddAlbum from "~/components/modal/add_album.vue";
 import EditTRack from "~/components/modal/edit_track.vue";
 import EditAlbum from "~/components/modal/edit_album.vue";
+import EditArtist from "~/components/modal/edit_artist.vue";
 
 export default {
     components: {
@@ -52,7 +54,8 @@ export default {
         AddArtist,
         AddAlbum,
         EditTRack,
-        EditAlbum
+        EditAlbum,
+        EditArtist
     },
     data() {
         return {
@@ -141,6 +144,7 @@ export default {
 
                 edit_track: "open_edit_track",
                 edit_album: "open_edit_album",
+                edit_artist: "open_edit_artist",
 
                 tracks: "list_tracks"
             }

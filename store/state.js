@@ -16,6 +16,7 @@ export default () => ({
 
     update_track: false,
     update_album: false,
+    update_artist: false,
     track_update: [],
     current_album: [],
     current_artist: [],
