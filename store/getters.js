@@ -28,7 +28,19 @@ export default {
     open_edit_track(state) {
       return state.update_track;
     },
+    open_edit_album(state) {
+      return state.update_album;
+    },
     update_tracks(state) {
       return state.track_update;
+    },
+    update_album(state) {
+      return state.current_album;
+    },
+    get_current_album(state) {
+      return state.current_album;
+    },
+    get_current_artist(state) {
+      return state.current_artist;
     }
   };

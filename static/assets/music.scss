@@ -347,6 +347,13 @@ $critical: #E84D2E;
         overflow-y: auto;
         overflow-x: hidden;
     }
+    &__body2 {
+        height: calc(100vh - 550px);
+        width: 100%;
+        // border: 1px solid red;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
 }
 .covers {
     &__card {
@@ -402,7 +409,9 @@ $critical: #E84D2E;
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        // border: 1px solid red;
+        background: white;
+        box-shadow: 0px 4px 20px -5px #193c2a5c;
+        border-radius: 10px;
         height: 50px;
         min-width: 100%;
         font-family: font_BL;
@@ -1058,5 +1067,70 @@ $critical: #E84D2E;
         height: calc(100vh - 400px);
         padding: 25px;
         padding-bottom: 0;
+    }
+}
+.view {
+    &__layout {
+        // border: 1px solid red;
+        background: white;
+        border-radius: 10px;
+        width: 100%;
+        height: 300px;
+        padding: 25px;     
+        box-shadow: 0px 4px 20px -5px #193c2a5c;   
+    }
+    &__banner {
+        // border: 1px solid red;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+    &__bannerImg {
+        height: 100%;
+        width: auto;
+        // outline: 5px;
+        // outline-color: white;
+        // outline-style: solid;
+        // box-shadow: 0px 4px 20px -5px #193c2a5c;
+        border-radius: 10px;
+    }
+    &__bannerContent {
+        // border: 1px solid red;
+        width: 100%;
+        height: 100%;
+        margin-left: 50px;
+    }
+    &__title {
+        font-size: 45px;
+        font-family: font_B;
+        margin-bottom: 25px;
+        color: $main;
+    }
+    &__sub {
+        font-size: 20px;
+        font-family: font_M;
+        color: $sub;
+    }
+    &__bannerButtons {
+        // border: 1px solid red;
+        position: relative;
+        bottom: -95px;
+    }
+    &__edit {
+        // float: right;
+        background: $common;
+        color: white;
+        font-family: font_M;
+        font-size: 14px;
+        padding: 5px 20px;
+        border-radius: 5px;
+        transition: 0.2s;
+        cursor: pointer;
+        &:hover {
+            background: $main;
+            transition: 0.2s;
+        }
     }
 }

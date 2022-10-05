@@ -26,7 +26,14 @@
             <div class="covers__card" v-for="(album, a) in albumz" :key="'a'+a">
                 <div class="covers__box">
 
-                    <img :src="`${link}/${album.album_img}`" :alt="`${link}/${album.album_img}`" class="covers__img" width="100%" height="auto">
+                    <img 
+                        :src="`${link}/${album.album_img}`" 
+                        :alt="`${link}/${album.album_img}`" 
+                        class="covers__img" 
+                        width="100%" 
+                        height="auto" 
+                        @click="open_album(album)">
+                        
                     <div class="covers__text">
                         <div class="covers__title">{{ album.album_name }}</div>
                         <div class="covers__sub">{{ album.artist_name }}</div>
@@ -60,6 +67,10 @@ export default {
         }
     },
     methods: {
+        open_album(album) {
+            this.$store.commit("find_current_album", album);
+            this.$router.push('/albums/view_tracks');
+        },
         logout() {
             this.$router.push('/');
         },

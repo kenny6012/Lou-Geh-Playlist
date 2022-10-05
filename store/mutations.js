@@ -56,7 +56,16 @@ export default {
     update_track(state, data) {
         state.update_track = data;
     },
+    update_album(state, data) {
+        state.update_album = data;
+    },
     track_updater(state, data) {
         state.track_update = data;
+    },
+    find_current_album(state, data) {
+        state.current_album = data;
+    },
+    find_current_artist(state, data) {
+        state.current_artist = data;
     },
 };

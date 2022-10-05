@@ -15,6 +15,9 @@ export default () => ({
     open_add_album: false,
 
     update_track: false,
+    update_album: false,
     track_update: [],
+    current_album: [],
+    current_artist: [],
 });
   
